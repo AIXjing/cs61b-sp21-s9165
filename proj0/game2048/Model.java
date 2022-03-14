@@ -94,74 +94,79 @@ public class Model extends Observable {
         setChanged();
     }
 
-    /** Tilt the board toward SIDE. Return true iff this changes the board.
-     *
-     * 1. If two Tile objects are adjacent in the direction of motion and have
-     *    the same value, they are merged into one Tile of twice the original
-     *    value and that new value is added to the score instance variable
-     * 2. A tile that is the result of a merge will not merge again on that
-     *    tilt. So each move, every tile will only ever be part of at most one
-     *    merge (perhaps zero).
-     * 3. When three adjacent tiles in the direction of motion have the same
-     *    value, then the leading two tiles in the direction of motion merge,
-     *    and the trailing tile does not.
-     * */
-    public boolean tilt(Side side) {
-        boolean changed;
-        changed = false;
+  /**
+   * Tilt the board toward SIDE. Return true iff this changes the board.
+   *
+   * <p>1. If two Tile objects are adjacent in the direction of motion and have the same value, they
+   * are merged into one Tile of twice the original value and that new value is added to the score
+   * instance variable 2. A tile that is the result of a merge will not merge again on that tilt. So
+   * each move, every tile will only ever be part of at most one merge (perhaps zero). 3. When three
+   * adjacent tiles in the direction of motion have the same value, then the leading two tiles in
+   * the direction of motion merge, and the trailing tile does not.
+   */
+  public boolean tilt(Side side) {
+    boolean changed;
+    changed = false;
 
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
+    // TODO: Modify this.board (and perhaps this.score) to account
+    // for the tilt to the Side SIDE. If the board changed, set the
+    // changed local variable to true.
 
-        this.board.setViewingPerspective(side);
-        if (emptySpaceExists(board) && atLeastOneMoveExists(board) && !maxTileExists(board)) {
-          for (int c = 0; c < board.size(); c++) {
-              boolean isMerged = false;
-            for (int r = board.size() - 1; r >= 0; r--) {
-              Tile t = board.tile(c, r);
-              if (t != null) {
-                int nextTileRow = board.nextTile(c, r);
-                if (nextTileRow == r) {
-                    // no nextTile found, just move till the end
-                    var toRow = size() - 1;
-                    if (r != toRow) {
-                        board.move(c, toRow, t);
-                        changed = true;
-                    }
-                } else {
-                    // found a nextTile, check whether nextTile equals tile
-                    if (t.value() == tile(c, nextTileRow).value() && !isMerged) {
-                        var merged = board.move(c, nextTileRow, t);
-                        if (merged) this.score = this.score + t.value()*2;
-                        isMerged = true;
-                        changed = true;
-                    }
-                    else {
-                        isMerged = false;
-                        var toRow = nextTileRow - 1;
-                        if ( r != toRow) {
-//                            System.out.println(String.format("move c: %d, r: %d, t: %s", c, toRow, t));
-                            board.move(c, toRow, t);
-                            changed = true;
-                        }
-
-                    }
+    this.board.setViewingPerspective(side);
+    if (emptySpaceExists(board) && atLeastOneMoveExists(board) && !maxTileExists(board)) {
+      for (int c = 0; c < board.size(); c++) {
+        boolean isMerged = false;
+        for (int r = board.size() - 1; r >= 0; r--) {
+          Tile t = board.tile(c, r);
+          if (t != null) {
+            int nextTileRow = nextTile(c, r);
+            if (nextTileRow == r) {
+              // no nextTile found, just move till the end
+              var toRow = size() - 1;
+              if (r != toRow) {
+                board.move(c, toRow, t);
+                changed = true;
+              }
+            } else {
+              // found a nextTile, check whether nextTile equals tile
+              if (t.value() == tile(c, nextTileRow).value() && !isMerged) {
+                var merged = board.move(c, nextTileRow, t);
+                if (merged) this.score = this.score + t.value() * 2;
+                isMerged = true;
+                changed = true;
+              } else {
+                isMerged = false;
+                var toRow = nextTileRow - 1;
+                if (r != toRow) {
+                  //                            System.out.println(String.format("move c: %d, r: %d,
+                  // t: %s", c, toRow, t));
+                  board.move(c, toRow, t);
+                  changed = true;
                 }
               }
-
             }
           }
-          //            }
         }
+      }
+      //            }
+    }
 
-        this.board.setViewingPerspective(Side.NORTH);
+    this.board.setViewingPerspective(Side.NORTH);
 
-        checkGameOver();
-        if (changed) {
-          setChanged();
-        }
-        return changed;
+    checkGameOver();
+    if (changed) {
+      setChanged();
+    }
+    return changed;
+  }
+
+  private int nextTile(int currCol, int currRow) {
+    for (int row = currRow + 1; row < size(); row++) {
+      if (this.tile(currCol, row) != null) {
+        return row;
+      }
+    }
+    return currRow;
   }
 
     /** Checks if the game is over and sets the gameOver variable

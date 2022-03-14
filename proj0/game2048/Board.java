@@ -103,20 +103,6 @@ public class Board implements Iterable<Tile> {
         }
     }
 
-    public int nextTile(int currCol, int currRow) {
-//        var viewCol = viewPerspective.col(t.col(), t.row(), size());
-//        var viewRow = viewPerspective.row(t.col(), t.row(), size());
-
-        Tile nextTile;
-        for (int row = currRow + 1; row < size(); row++) {
-            nextTile = this.tile(currCol, row);
-            if (nextTile != null) {
-                return row;
-            }
-        }
-        return currRow;
-    }
-
     @Override
     /** Returns the board as a string, used for debugging. */
     public String toString() {
