@@ -122,25 +122,24 @@ public class Model extends Observable {
             int nextTileRow = nextTile(c, r);
             if (nextTileRow == r) {
               // no nextTile found, just move till the end
-              var toRow = size() - 1;
+              int toRow = size() - 1;
               if (r != toRow) {
                 board.move(c, toRow, t);
                 changed = true;
               }
+              // if t is already on the top row, nothing to do.
             } else {
               // found a nextTile, check whether nextTile equals tile
               if (t.value() == tile(c, nextTileRow).value() && !isMerged) {
-                var merged = board.move(c, nextTileRow, t);
-                if (merged) this.score = this.score + t.value() * 2;
-                isMerged = true;
+                isMerged = board.move(c, nextTileRow, t);
+                if (isMerged) this.score = this.score + t.value() * 2;
+//                isMerged = true;
                 changed = true;
               } else {
-                isMerged = false;
-                var toRow = nextTileRow - 1;
+                //                isMerged = false;
+                int toRow = nextTileRow - 1;
                 if (r != toRow) {
-                  //                            System.out.println(String.format("move c: %d, r: %d,
-                  // t: %s", c, toRow, t));
-                  board.move(c, toRow, t);
+                  isMerged = board.move(c, toRow, t);
                   changed = true;
                 }
               }
@@ -148,7 +147,6 @@ public class Model extends Observable {
           }
         }
       }
-      //            }
     }
 
     this.board.setViewingPerspective(Side.NORTH);
@@ -225,9 +223,14 @@ public class Model extends Observable {
         for(int i = 1; i < b.size(); i++) {
             for (int j = 1; j < b.size(); j++) {
                 if (b.tile(i-1,j).value() == b.tile(i,j).value() ||
-                        b.tile(i,j-1).value() == b.tile(i,j).value()
-                ) return true;
+                        b.tile(i,j-1).value() == b.tile(i,j).value()) {
+                    return true;
+                }
             }
+        }
+        if (b.tile(0,0).value() == b.tile(0,1).value() ||
+                b.tile(0,0).value() == b.tile(1,0).value()) {
+            return true;
         }
         return false;
     }

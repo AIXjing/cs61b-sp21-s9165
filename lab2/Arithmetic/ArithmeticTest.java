@@ -7,6 +7,8 @@ public class ArithmeticTest {
 
     /** Performs a few arbitrary tests to see if the product method is
      * correct */
+
+    //NOTE: when using @Test, all the method should be non-static
     @Test
     public void testProduct() {
         /* assertEquals for comparison of ints takes two arguments:

@@ -10,7 +10,8 @@ public class IntListExercises {
      */
     public static void addConstant(IntList lst, int c) {
         IntList head = lst;
-        while (head.rest != null) {
+        // change head.rest to head
+        while (head != null) {
             head.first += c;
             head = head.rest;
         }
@@ -29,6 +30,14 @@ public class IntListExercises {
             if (firstDigitEqualsLastDigit(max(p))) {
                 p.first = 0;
             }
+            /** this is recommended by the course material
+             * to seperate two methods for debugging
+             */
+//            int currentMax = max(p);
+//            boolean firstEqualsLast = firstDigitEqualsLastDigit(currentMax);
+//            if (firstEqualsLast) {
+//                p.first = 0;
+//            }
             p = p.rest;
         }
     }
@@ -51,7 +60,8 @@ public class IntListExercises {
      */
     public static boolean firstDigitEqualsLastDigit(int x) {
         int lastDigit = x % 10;
-        while (x > 10) {
+        // change x > 10 to x >= 10
+        while (x >= 10) {
             x = x / 10;
         }
         int firstDigit = x % 10;
@@ -66,6 +76,7 @@ public class IntListExercises {
      * @return True if there was an update to the list
      */
     public static boolean squarePrimes(IntList lst) {
+//        return squarePrimesTailRec(lst, false);
         // Base Case: we have reached the end of the list
         if (lst == null) {
             return false;
@@ -76,7 +87,22 @@ public class IntListExercises {
         if (currElemIsPrime) {
             lst.first *= lst.first;
         }
+        boolean rec = squarePrimes(lst.rest);
+        return rec || currElemIsPrime;
+    }
 
-        return currElemIsPrime || squarePrimes(lst.rest);
+    public static boolean squarePrimesTailRec(IntList lst, boolean tail) {
+        // Base Case: we have reached the end of the list
+        if (lst == null) {
+            return tail;
+        }
+
+        boolean currElemIsPrime = Primes.isPrime(lst.first);
+
+        if (currElemIsPrime) {
+            lst.first *= lst.first;
+        }
+
+        return squarePrimesTailRec(lst.rest, currElemIsPrime || tail);
     }
 }
