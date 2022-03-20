@@ -15,8 +15,12 @@ public class LinkedListDequeTest {
     public void addIsEmptySizeTest() {
 
         System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
+
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
+//        lld1.addFirst("1");
+//        lld1.addFirst("2");
+//        lld1.addLast("last1");
+//        lld1.addLast("last2");
 
 		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
 		lld1.addFirst("front");
@@ -34,7 +38,6 @@ public class LinkedListDequeTest {
 
 		System.out.println("Printing out deque: ");
 		lld1.printDeque();
-		*/
     }
 
     @Test
@@ -42,7 +45,7 @@ public class LinkedListDequeTest {
     public void addRemoveTest() {
 
         System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        /*
+
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty
 		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
@@ -54,7 +57,38 @@ public class LinkedListDequeTest {
 		lld1.removeFirst();
 		// should be empty
 		assertTrue("lld1 should be empty after removal", lld1.isEmpty());
-        */
+
+    }
+
+    @Test
+    public void removeLastTestSelfMade() {
+        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
+        lld1.addFirst("a");
+        lld1.addLast("b");
+        lld1.addFirst("c");
+        lld1.addFirst("d");
+        lld1.addFirst("e");
+        lld1.printDeque();
+        System.out.println("Remove " + lld1.removeFirst() + ", the current size is " + lld1.size());
+        System.out.println("Remove " + lld1.removeFirst() + ", the current size is " + lld1.size());
+        System.out.println("Remove " + lld1.removeLast() + ", the current size is " + lld1.size());
+        System.out.println("Remove " + lld1.removeLast() + ", the current size is " + lld1.size());
+        System.out.println("Remove " + lld1.removeLast() + ", the current size is " + lld1.size());
+    }
+
+    @Test
+    public void getTest() {
+        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
+        lld1.addFirst("a");
+        lld1.addLast("b");
+        lld1.addFirst("c");
+        lld1.addFirst("d");
+        lld1.addFirst("e");
+        lld1.printDeque();
+        System.out.println("get(0): " + lld1.get(0));
+        System.out.println("get(1): " + lld1.get(1));
+        System.out.println("get(3): " + lld1.get(3));
+        System.out.println("get(10): " + lld1.get(10));
     }
 
     @Test

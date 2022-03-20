@@ -1,5 +1,6 @@
 package timingtest;
 import edu.princeton.cs.algs4.Stopwatch;
+import org.junit.Test;
 
 /**
  * Created by hug.
@@ -57,4 +58,11 @@ public class TimeSLList {
         printTimingTable(Ns,times,opCounts);
     }
 
+    @Test
+    public void SLListConstructionTest() {
+        SLList<Integer> Slist = new SLList<>();
+        Slist.addLast(1);
+        Slist.addLast(2);
+        Slist.addLast(3);
+    }
 }
