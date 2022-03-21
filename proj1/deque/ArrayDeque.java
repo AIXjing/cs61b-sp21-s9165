@@ -16,7 +16,11 @@ public class ArrayDeque<T> {
 
     /** Inserts item into the front of the list. */
     public void addFirst(T item){
-        if (size < items.length) {
+        if (size == 0) {
+            items[frontIndex] = item;
+            backIndex = 0;
+        }
+        else if (size < items.length) {
             if (frontIndex != 0) {
                 frontIndex = frontIndex - 1;
                 items[frontIndex] = item;

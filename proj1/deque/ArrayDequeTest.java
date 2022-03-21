@@ -18,6 +18,14 @@ public class ArrayDequeTest {
     }
 
     @Test
+    public void addFirst() {
+        ArrayDeque<String> arrDeque = new ArrayDeque<>();
+        arrDeque.addFirst("1");
+        arrDeque.addFirst("2");
+        arrDeque.addFirst("3");
+    }
+
+    @Test
     public void removeFirstItemSmallTest() {
         ArrayDeque<String> arrDeque = new ArrayDeque<>();
         /* add item 0 to 7 from the back of the deque */
