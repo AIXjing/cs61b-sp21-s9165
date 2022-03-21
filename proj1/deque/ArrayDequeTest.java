@@ -2,6 +2,8 @@ package deque;
 
 import org.junit.Test;
 
+import java.util.Random;
+
 public class ArrayDequeTest {
     @Test
     public void addLastTest() {
@@ -11,6 +13,27 @@ public class ArrayDequeTest {
         }
         for (int j = 0; j < 45; j++) {
             arrDeque.removeFirst();
+        }
+        arrDeque.printDeque();
+    }
+
+    @Test
+    public void removeFirstItemSmallTest() {
+        ArrayDeque<String> arrDeque = new ArrayDeque<>();
+        /* add item 0 to 7 from the back of the deque */
+        for (int i = 0; i < 10; i++) {
+            if (Math.random() < 0.5) arrDeque.addFirst(String.valueOf(i));
+            else {
+                arrDeque.addLast(String.valueOf(i));
+            }
+        }
+        arrDeque.printDeque();
+        /* remove all the items from the front of the deque */
+        for (int j = 0; j < 1000; j++) {
+            if (Math.random() < 0.3) arrDeque.removeFirst();
+            else if (Math.random() < 0.6) arrDeque.removeLast();
+            else if (Math.random() < 0.8) arrDeque.addFirst(String.valueOf(j*10));
+            else arrDeque.addLast(String.valueOf(j*20));
         }
         arrDeque.printDeque();
     }
@@ -33,7 +56,6 @@ public class ArrayDequeTest {
         System.out.println("1. Remove last " + arrDeque.removeLast());
         System.out.println("2. Remove last " + arrDeque.removeLast());
         System.out.println("3. Remove last " + arrDeque.removeLast());
-
     }
 
     @Test

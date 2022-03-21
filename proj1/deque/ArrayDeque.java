@@ -2,8 +2,8 @@ package deque;
 
 public class ArrayDeque<T> {
     private T[] items;
-    int frontIndex;
-    int backIndex;
+    private int frontIndex;
+    private int backIndex;
     private int size;
 
     /** Creates an empty list. */
@@ -49,15 +49,22 @@ public class ArrayDeque<T> {
         if(isEmpty()) return null;
         T firstItem = items[frontIndex];
         items[frontIndex] = null;
-        frontIndex += 1;
-        size = size - 1;
-        // resizing
-        if ((size < items.length / 4) && (size > 8) ) {
-            T[] a = (T[]) new Object[items.length / 4];
-            System.arraycopy(items, frontIndex, a, 0, size);
-            items = a;
+        size -= 1;
+        if (size == 0) {
             frontIndex = 0;
-            backIndex = size - 1;
+            backIndex = 0;
+            resize(8);
+        }
+        else {
+            frontIndex += 1;
+            // resizing
+            if ((size < items.length / 4) && (size > 8) ) {
+                T[] a = (T[]) new Object[items.length / 4];
+                System.arraycopy(items, frontIndex, a, 0, size);
+                items = a;
+                frontIndex = 0;
+                backIndex = size - 1;
+            }
         }
         return firstItem;
     }
@@ -68,14 +75,21 @@ public class ArrayDeque<T> {
         if(isEmpty()) return null;
         T lastItem = items[backIndex];
         items[backIndex] = null;
-        backIndex -= 1;
-        size = size - 1;
-        if ((size < items.length / 4) && (size > 8) ) {
-            T[] a = (T[]) new Object[items.length / 4];
-            System.arraycopy(items, frontIndex, a, 0, size);
-            items = a;
+        size -= 1;
+        if (size == 0) {
+            backIndex = 0;
             frontIndex = 0;
-            backIndex = size - 1;
+            resize(8);
+        }
+        else {
+          backIndex -= 1;
+            if ((size < items.length / 4) && (size > 8) ) {
+                T[] a = (T[]) new Object[items.length / 4];
+                System.arraycopy(items, frontIndex, a, 0, size);
+                items = a;
+                frontIndex = 0;
+                backIndex = size - 1;
+            }
         }
         return lastItem;
     }
@@ -94,11 +108,6 @@ public class ArrayDeque<T> {
     public boolean isEmpty(){
         if (size == 0) return true;
         return false;
-    }
-
-    /** Returns the item from the back of the list. */
-    public T getLast() {
-        return items[backIndex];
     }
 
     /** Gets the ith item in the list from the frontIndex. */
