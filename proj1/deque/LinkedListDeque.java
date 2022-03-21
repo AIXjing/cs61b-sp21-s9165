@@ -59,7 +59,6 @@ public class LinkedListDeque<T> {
             System.out.println();
             return;
         }
-
         IntNode nextNode = sentinel.next;
        for (int i = 0; i < this.size; i++) {
             System.out.println(nextNode.item);
@@ -92,13 +91,35 @@ public class LinkedListDeque<T> {
         return lastItem;
     }
 
+    /* get i, return T */
     public T get(int index) {
-        if (index >= size || index == 0) return null;
-        if (index == 1) return sentinel.next.item;
+        IntNode node = getNode(index);
+        return node.item;
+    }
+
+    /* get i, return T */
+    public T getRecursive(int index) {
+        if(index >= size) return null;
+        return getRecursiveHelp(index, sentinel).item;
+    }
+
+    /* helper method for get(i), return IntNode */
+    private IntNode getNode(int index) {
+        if (index >= size || index == 0) return sentinel;
+        if (index == 1) return sentinel.next;
         IntNode nextNode = sentinel.next;
         for (int i = 2; i <= index; i++) {
             nextNode = nextNode.next;
         }
-        return nextNode.item;
+        return nextNode;
+    }
+
+    /* a help method for getRecursive, return IntNode */
+    private IntNode getRecursiveHelp(int index, IntNode startNode) {
+        if (index == 0) {
+            return startNode;
+        }
+        startNode = startNode.next;
+        return getRecursiveHelp(index - 1, startNode);
     }
 }

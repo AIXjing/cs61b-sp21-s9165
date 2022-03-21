@@ -87,8 +87,12 @@ public class LinkedListDequeTest {
         lld1.printDeque();
         System.out.println("get(0): " + lld1.get(0));
         System.out.println("get(1): " + lld1.get(1));
-        System.out.println("get(3): " + lld1.get(3));
-        System.out.println("get(10): " + lld1.get(10));
+        System.out.println("getRecursive(0) " + lld1.getRecursive(0));
+        System.out.println("getRecursive(1) " + lld1.getRecursive(1));
+        System.out.println("getRecursive(3) " + lld1.getRecursive(3));
+        System.out.println("getRecursive(10) " + lld1.getRecursive(10));
+//        System.out.println("get(3): " + lld1.get(3));
+//        System.out.println("get(10): " + lld1.get(10));
     }
 
     @Test
