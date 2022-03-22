@@ -50,12 +50,13 @@ public class ArrayDequeTest {
     /* remove all the items from the front of the deque */
     for (int j = 0; j < 10000; j++) {
       if (Math.random() < 0.25) arrDeque.removeFirst();
-      else if (Math.random() < 0.5) arrDeque.removeLast();
-      else if (Math.random() < 0.75) arrDeque.addFirst(j * 10 + "addFirst");
+      else if (Math.random() < 0.4) arrDeque.removeLast();
+      else if (Math.random() < 0.8) arrDeque.addFirst(j * 10 + "addFirst");
       else arrDeque.addLast(j * 20 + "addLast");
     }
     //    arrDeque.printDeque();
     System.out.println(arrDeque.get(0));
+    arrDeque.isEmpty();
   }
 
   @Test

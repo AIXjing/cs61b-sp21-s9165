@@ -2,7 +2,7 @@ package deque;
 
 import edu.princeton.cs.algs4.In;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private class IntNode {
         public T item;
         public IntNode next;
@@ -49,10 +49,10 @@ public class LinkedListDeque<T> {
         return this.size;
     }
 
-    public boolean isEmpty() {
-        if (size == 0) return true;
-        return false;
-    }
+//    public boolean isEmpty() {
+//        if (size == 0) return true;
+//        return false;
+//    }
 
     public void printDeque(){
         if(isEmpty()) {

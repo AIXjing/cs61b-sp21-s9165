@@ -1,6 +1,6 @@
 package deque;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
   private final double REFACTOR = 2.0;
   protected int head;
   protected int tail;
@@ -83,10 +83,10 @@ public class ArrayDeque<T> {
     System.out.println();
   }
 
-  public boolean isEmpty() {
-    if (size == 0) return true;
-    return false;
-  }
+//  public boolean isEmpty() {
+//    if (size == 0) return true;
+//    return false;
+//  }
 
   /** Gets the ith item in the list from the frontIndex. */
   public T get(int i) {
