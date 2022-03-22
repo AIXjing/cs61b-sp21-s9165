@@ -91,7 +91,7 @@ public class ArrayDeque<T> implements Deque<T> {
   /** Gets the ith item in the list from the frontIndex. */
   public T get(int i) {
     if (isEmpty()) return null;
-    return items[head + i + 1];
+    return items[(head + i + 1)%items.length];
   }
 
   /** Returns the number of items in the list. */
