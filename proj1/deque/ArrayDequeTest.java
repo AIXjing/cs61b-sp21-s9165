@@ -46,15 +46,16 @@ public class ArrayDequeTest {
         arrDeque.addLast(String.valueOf(i));
       }
     }
-    arrDeque.printDeque();
+//    arrDeque.printDeque();
     /* remove all the items from the front of the deque */
     for (int j = 0; j < 10000; j++) {
-      if (Math.random() < 0.3) arrDeque.removeFirst();
-      else if (Math.random() < 0.6) arrDeque.removeLast();
-      else if (Math.random() < 0.8) arrDeque.addFirst(j * 10 + "addFirst");
+      if (Math.random() < 0.25) arrDeque.removeFirst();
+      else if (Math.random() < 0.5) arrDeque.removeLast();
+      else if (Math.random() < 0.75) arrDeque.addFirst(j * 10 + "addFirst");
       else arrDeque.addLast(j * 20 + "addLast");
     }
-    arrDeque.printDeque();
+    //    arrDeque.printDeque();
+    System.out.println(arrDeque.get(0));
   }
 
   @Test
@@ -80,7 +81,9 @@ public class ArrayDequeTest {
     for (int i = -1; i > -1000; i--) {
       arrDeque.addFirst(i);
     }
-    System.out.println(arrDeque.capacity());
+
+    System.out.println("get(0): " + arrDeque.get(0));
+    System.out.println("arrayDeque capacity: " + arrDeque.capacity());
     assertEquals(1999, arrDeque.size());
 
     for (int i = -999; i < 1000; i++) {
@@ -88,24 +91,26 @@ public class ArrayDequeTest {
       assertEquals(i, first.intValue());
     }
     assertEquals(0, arrDeque.size());
-      System.out.println(arrDeque.capacity());
+    System.out.println("arrayDeque capacity: " + arrDeque.capacity());
+    System.out.println("get(0): " + arrDeque.get(0));
   }
 
   @Test
-  public void removeFillupAssertTest2() {
-    ArrayDeque<Integer> arrDeque = new ArrayDeque<>();
-    for (int i = 0; i < 1000; i++) {
-      arrDeque.addLast(i);
+  public void addGetTest() {
+    ArrayDeque<String> arrDeque = new ArrayDeque<>();
+    for (int i = 0; i < 10; i++) {
+      if (i % 2 == 0) arrDeque.addFirst(i + ". addFirst");
+      else arrDeque.addLast(i + ". addLast");
     }
-    assertEquals(1000, arrDeque.size());
-    for (int i = -1; i > -1000; i--) {
-      arrDeque.addFirst(i);
+    assertEquals(10, arrDeque.size());
+    arrDeque.printDeque();
+    for (int i = 0; i < 10; i++) {
+      System.out.println("get(" + i + "): " + arrDeque.get(i));
     }
-    assertEquals(1999, arrDeque.size());
-    for (int i = 999; i > -1000; i--) {
-      Integer first = arrDeque.removeLast();
-      assertEquals(i, first.intValue());
+    for (int i = 0; i < 10; i++) {
+      if (i % 2 == 0) arrDeque.removeFirst();
+      else arrDeque.removeLast();
     }
-    assertEquals(0, arrDeque.size());
+    System.out.println(arrDeque.get(0));
   }
 }
