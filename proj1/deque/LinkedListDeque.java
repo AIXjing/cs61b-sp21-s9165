@@ -1,9 +1,9 @@
 package deque;
 
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
   private IntNode sentinel;
   private int size;
   /** The first item (if it exists) is at sentinel.next. */
@@ -93,10 +93,10 @@ public class LinkedListDeque<T> implements Deque<T> {
 
   /* helper method for get(i), return IntNode */
   private IntNode getNode(int index) {
-    if (index >= size || index == 0) return sentinel;
-    if (index == 1) return sentinel.next;
+    if (index >= size) return sentinel;
+    if (index == 0) return sentinel.next;
     IntNode nextNode = sentinel.next;
-    for (int i = 2; i <= index; i++) {
+    for (int i = 1; i <= index; i++) {
       nextNode = nextNode.next;
     }
     return nextNode;
@@ -112,7 +112,16 @@ public class LinkedListDeque<T> implements Deque<T> {
   }
 
   public Iterator<T> iterator() {
-    return iterator();
+    return new LinkedListDequeIterator<T>(this);
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof LinkedListDeque<?>)) return false;
+    if (((LinkedListDeque<?>) o).size() != this.size()) return false;
+    for (int i = 0; i < size; i++) {
+      if (!this.get(i).equals(((LinkedListDeque<?>) o).get(i))) return false;
+    }
+    return true;
   }
 
   private class IntNode {
@@ -124,6 +133,29 @@ public class LinkedListDeque<T> implements Deque<T> {
       this.item = i;
       this.prev = prev;
       this.next = next;
+    }
+  }
+
+  class LinkedListDequeIterator<T> implements Iterator<T> {
+    private LinkedListDeque inner;
+    private int currPosition;
+
+    public LinkedListDequeIterator(LinkedListDeque linkedDeque) {
+      this.inner = linkedDeque;
+      this.currPosition = 0;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return currPosition < inner.size() - 1;
+    }
+
+    @Override
+    public T next() {
+      if (currPosition >= inner.size() - 1) {
+        throw new NoSuchElementException();
+      }
+      return (T) inner.get(currPosition++);
     }
   }
 }

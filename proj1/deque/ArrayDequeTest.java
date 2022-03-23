@@ -1,7 +1,7 @@
 package deque;
 
+import org.junit.Assert;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -122,7 +122,25 @@ public class ArrayDequeTest {
       if (i % 2 == 0) arrDeque.addFirst(i + ". addFirst");
       else arrDeque.addLast(i + ". addLast");
     }
+    for(String s : arrDeque) {
+      System.out.println(s);
+    }
+  }
 
-    arrDeque.iterator().toString();
+  @Test
+  public void TestEquals() {
+    ArrayDeque<String> arrDeque1 = new ArrayDeque<>();
+    for (int i = 0; i < 10; i++) {
+      if (i % 2 == 0) arrDeque1.addFirst(i + ". addFirst");
+      else arrDeque1.addLast(i + ". addLast");
+    }
+
+    ArrayDeque<String> arrDeque2 = new ArrayDeque<>();
+    for (int i = 0; i < 10; i++) {
+      if (i % 2 == 0) arrDeque2.addLast(i + ". addLast");
+      else arrDeque2.addFirst(i + ". addFirst");
+    }
+    Assert.assertEquals(false, arrDeque1.equals(arrDeque2));
+    Assert.assertEquals(true, arrDeque1.equals(arrDeque1));
   }
 }

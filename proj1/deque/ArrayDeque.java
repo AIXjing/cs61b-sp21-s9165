@@ -1,9 +1,9 @@
 package deque;
 
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
   private final double REFACTOR = 2.0;
   protected int head;
   protected int tail;
@@ -124,6 +124,38 @@ public class ArrayDeque<T> implements Deque<T>{
   }
 
   public Iterator<T> iterator() {
-    return iterator();
+    return new ArrayDequeIterator<>(this);
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof ArrayDeque<?>)) return false;
+    if (((ArrayDeque<?>) o).size() != this.size()) return false;
+    for (int i = 0; i < size; i++) {
+      if (!this.get(i).equals(((ArrayDeque<?>) o).get(i))) return false;
+    }
+    return true;
+  }
+}
+
+class ArrayDequeIterator<T> implements Iterator<T> {
+  private ArrayDeque<T> inner;
+  private int currentPosition;
+
+  public ArrayDequeIterator(ArrayDeque<T> inner) {
+    this.inner = inner;
+    currentPosition = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return currentPosition < inner.size() - 1;
+  }
+
+  @Override
+  public T next() {
+    if (currentPosition >= inner.size() - 1) {
+      throw new NoSuchElementException();
+    }
+    return inner.get(currentPosition++);
   }
 }
