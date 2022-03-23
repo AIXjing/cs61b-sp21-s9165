@@ -155,7 +155,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            if (currPosition < inner.size() - 1) {
+            if (currPosition < inner.size()) {
                 return true;
             }
             return false;
@@ -163,7 +163,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public T next() {
-            if (currPosition >= inner.size() - 1) {
+            if (currPosition > inner.size() - 1) {
                 return null;
             }
             return inner.get(currPosition++);

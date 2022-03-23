@@ -11,7 +11,9 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
 
     // return the maximum element in this arrayDeque
     public T max() {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         int size = size();
         T max = get(0);
         for (int i = 1; i < size; i++) {

@@ -14,15 +14,36 @@ public class MaxArrayDequeTest {
     }
 
     @Test
-    public void maxTest() {
+    public void maxTest1() {
         MaxArrayDeque<Integer> maxDeque =
 //                new MaxArrayDeque<>(createCMP(a -> a));
                 new MaxArrayDeque<>((c1, c2) -> c1 - c2);
-        new MaxArrayDeque<>(new ComparableComparator());
+            new MaxArrayDeque<>(new ComparableComparator());
         for (int i = 0; i < 10; i++) {
             maxDeque.addFirst(i);
         }
-        assertEquals(Integer.valueOf(9), maxDeque.max());
+        for (int i = 20; i < 30; i++) {
+            maxDeque.addLast(i);
+        }
+        assertEquals(Integer.valueOf(29), maxDeque.max());
+    }
+
+    @Test
+    public void maxTest2(){
+        MaxArrayDeque<Integer> ald1 = new MaxArrayDeque<Integer>(new ComparableComparator());
+        for (int i = 0; i < 1000000; i++) {
+            ald1.addLast(i);
+        }
+
+        for (double i = 0; i < 500000; i++) {
+            assertEquals("Should have the same value", i, (double) ald1.removeFirst(), 0.0);
+        }
+
+        for (double i = 999999; i > 500000; i--) {
+            assertEquals("Should have the same value", i, (double) ald1.removeLast(), 0.0);
+        }
+        ald1.printDeque();
+        System.out.println(ald1.max());
     }
 
 

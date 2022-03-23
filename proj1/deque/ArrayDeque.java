@@ -171,7 +171,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            if (currentPosition < inner.size() - 1) {
+            if (currentPosition < inner.size()) {
                 return true;
             }
             return false;
@@ -179,7 +179,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public T next() {
-            if (currentPosition >= inner.size() - 1) {
+            if (currentPosition > inner.size() - 1) {
 //        throw new NoSuchElementException();
                 return null;
             }

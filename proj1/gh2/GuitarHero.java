@@ -6,19 +6,19 @@ import edu.princeton.cs.algs4.StdDraw;
 import java.util.Arrays;
 
 public class GuitarHero {
-    private static final double[] CONCERTs = new double[37];
+    private static final double[] CONCERTS = new double[37];
     private static final String KEYBOARD = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
 
     public static void main(String[] args) {
 
         for (int i = 0; i < 37; i++) {
-            CONCERTs[i] = 440 * Math.pow(2.0, (i - 24.0) / 12.0);
+            CONCERTS[i] = 440 * Math.pow(2.0, (i - 24.0) / 12.0);
         }
 
         /* create a guitar string array, for concerts */
         GuitarString[] strings = new GuitarString[37];
         for (int i = 0; i < 37; i++) {
-            strings[i] = new GuitarString(CONCERTs[i]);
+            strings[i] = new GuitarString(CONCERTS[i]);
         }
 
         while (true) {
