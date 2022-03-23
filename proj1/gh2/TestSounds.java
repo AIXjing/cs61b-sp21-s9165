@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class TestSounds {
     @Test
-    public void TestHarp() {
+    public void testHarp() {
         Harp harpString = new Harp(GuitarHeroLite.CONCERT_A);
         harpString.pluck();
         for (int i = 0; i < 50000; i += 1) {
@@ -15,7 +15,7 @@ public class TestSounds {
     }
 
     @Test
-    public void TestDrum() {
+    public void testDrum() {
         Drum drum = new Drum(GuitarHeroLite.CONCERT_C);
         drum.pluck();
         for (int i = 0; i < 50000; i += 1) {

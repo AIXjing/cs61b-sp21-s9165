@@ -61,7 +61,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     //    }
 
     public T removeFirst() {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         IntNode first = sentinel.next;
         T firstItem = first.item;
         IntNode newFirst = sentinel.next.next;
@@ -93,14 +95,20 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     /* get i, return T */
     public T getRecursive(int index) {
-        if (index > size) return null;
+        if (index > size) {
+            return null;
+        }
         return getRecursiveHelp(index, sentinel.next).item;
     }
 
     /* helper method for get(i), return IntNode */
     private IntNode getNode(int index) {
-        if (index >= size) return sentinel;
-        if (index == 0) return sentinel.next;
+        if (index >= size) {
+            return sentinel;
+        }
+        if (index == 0) {
+            return sentinel.next;
+        }
         IntNode nextNode = sentinel.next;
         for (int i = 1; i <= index; i++) {
             nextNode = nextNode.next;
@@ -122,10 +130,16 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof Deque<?>)) return false;
-        if (((Deque<?>) o).size() != this.size()) return false;
+        if (!(o instanceof Deque<?>)) {
+            return false;
+        }
+        if (((Deque<?>) o).size() != this.size()) {
+            return false;
+        }
         for (int i = 0; i < size; i++) {
-            if (!this.get(i).equals(((Deque<?>) o).get(i))) return false;
+            if (!this.get(i).equals(((Deque<?>) o).get(i))) {
+                return false;
+            }
         }
         return true;
     }
@@ -141,7 +155,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            if (currPosition < inner.size() - 1) return true;
+            if (currPosition < inner.size() - 1) {
+                return true;
+            }
             return false;
         }
 
