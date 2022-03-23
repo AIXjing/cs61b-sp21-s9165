@@ -1,5 +1,6 @@
 package deque;
 
+import org.apache.commons.collections.comparators.ComparableComparator;
 import org.junit.Test;
 
 import java.util.Comparator;
@@ -18,6 +19,7 @@ public class MaxArrayDequeTest {
         MaxArrayDeque<Integer> maxDeque =
 //                new MaxArrayDeque<>(createCMP(a -> a));
                 new MaxArrayDeque<>((c1, c2) -> c1 - c2);
+        new MaxArrayDeque<>(new ComparableComparator());
         for (int i = 0; i < 10; i++) {
             maxDeque.addFirst(i);
         }

@@ -1,6 +1,9 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque<T> {
+import java.util.Arrays;
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T>{
   private final double REFACTOR = 2.0;
   protected int head;
   protected int tail;
@@ -49,10 +52,10 @@ public class ArrayDeque<T> implements Deque<T> {
     items[head] = null;
     size -= 1;
 
-      // resizing
-      if ((size < items.length / 4) && (size > 8)) {
-        resize(items.length / 2);
-      }
+    // resizing
+    if ((size < items.length / 4) && (size > 8)) {
+      resize(items.length / 2);
+    }
 
     return firstItem;
   }
@@ -66,8 +69,8 @@ public class ArrayDeque<T> implements Deque<T> {
     size -= 1;
 
     if ((size < items.length / 4) && (size > 8)) {
-        resize(items.length / 2);
-      }
+      resize(items.length / 2);
+    }
 
     return lastItem;
   }
@@ -83,15 +86,15 @@ public class ArrayDeque<T> implements Deque<T> {
     System.out.println();
   }
 
-//  public boolean isEmpty() {
-//    if (size == 0) return true;
-//    return false;
-//  }
+  //  public boolean isEmpty() {
+  //    if (size == 0) return true;
+  //    return false;
+  //  }
 
   /** Gets the ith item in the list from the frontIndex. */
   public T get(int i) {
     if (isEmpty()) return null;
-    return items[(head + i + 1)%items.length];
+    return items[(head + i + 1) % items.length];
   }
 
   /** Returns the number of items in the list. */
@@ -118,5 +121,9 @@ public class ArrayDeque<T> implements Deque<T> {
     items = a;
     head = 0;
     tail = size + 1;
+  }
+
+  public Iterator<T> iterator() {
+    return iterator();
   }
 }

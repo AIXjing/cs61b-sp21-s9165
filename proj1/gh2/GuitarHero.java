@@ -1,12 +1,9 @@
 package gh2;
 
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
 
-import javax.swing.*;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class GuitarHero {
     private static final double[] CONCERTs = new double[37];
@@ -35,13 +32,11 @@ public class GuitarHero {
                 }
             }
 
-            /* compute the superposition of samples */
-            double sample = Arrays.stream(strings)
-                    .map(GuitarString::sample)
-                    .reduce(0.0, Double::sum);
-            System.out.println(strings[0].sample());
-            System.out.println(strings[1].sample());
-            System.out.println(sample);
+      /* compute the superposition of samples */
+      double sample = Arrays.stream(strings).map(GuitarString::sample).reduce(0.0, Double::sum);
+      System.out.println(strings[0].sample());
+      System.out.println(strings[1].sample());
+      System.out.println(sample);
 
             /* play the sample on standard audio */
             StdAudio.play(sample);

@@ -114,4 +114,15 @@ public class ArrayDequeTest {
     }
     System.out.println(arrDeque.get(0));
   }
+
+  @Test
+  public void TestIterator() {
+    ArrayDeque<String> arrDeque = new ArrayDeque<>();
+    for (int i = 0; i < 10; i++) {
+      if (i % 2 == 0) arrDeque.addFirst(i + ". addFirst");
+      else arrDeque.addLast(i + ". addLast");
+    }
+
+    arrDeque.iterator().toString();
+  }
 }
