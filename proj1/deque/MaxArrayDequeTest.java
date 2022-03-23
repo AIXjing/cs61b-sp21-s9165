@@ -4,14 +4,13 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 import org.junit.Test;
 
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
 public class MaxArrayDequeTest {
-    private<T> Comparator<T> createCMP(Function<T, Integer> keyGetter) {
-        return (c1,c2) -> keyGetter.apply(c1) - keyGetter.apply(c2);
+    private <T> Comparator<T> createCMP(Function<T, Integer> keyGetter) {
+        return (c1, c2) -> keyGetter.apply(c1) - keyGetter.apply(c2);
     }
 
     @Test
@@ -34,10 +33,11 @@ public class MaxArrayDequeTest {
 //                new MaxArrayDeque<>((c1, c2) -> c1.score() - c2.score());
 //                new MaxArrayDeque<Student>(createCMP(a -> a.score()));
     }
+
+    private record Student(
+            String name,
+            int score,
+            int age) {
+    }
 }
 
-record Student(
-        String name,
-        int score,
-        int age
-){}

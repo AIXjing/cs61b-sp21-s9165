@@ -11,7 +11,7 @@ public class GuitarHero {
 
     public static void main(String[] args) {
 
-        for(int i = 0; i < 37; i++) {
+        for (int i = 0; i < 37; i++) {
             CONCERTs[i] = 440 * Math.pow(2.0, (i - 24.0) / 12.0);
         }
 
@@ -32,11 +32,11 @@ public class GuitarHero {
                 }
             }
 
-      /* compute the superposition of samples */
-      double sample = Arrays.stream(strings).map(GuitarString::sample).reduce(0.0, Double::sum);
-      System.out.println(strings[0].sample());
-      System.out.println(strings[1].sample());
-      System.out.println(sample);
+            /* compute the superposition of samples */
+            double sample = Arrays.stream(strings).map(GuitarString::sample).reduce(0.0, Double::sum);
+            System.out.println(strings[0].sample());
+            System.out.println(strings[1].sample());
+            System.out.println(sample);
 
             /* play the sample on standard audio */
             StdAudio.play(sample);
