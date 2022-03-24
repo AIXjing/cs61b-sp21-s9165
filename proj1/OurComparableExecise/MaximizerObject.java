@@ -1,4 +1,4 @@
-package ComparableExercise;
+package OurComparableExecise;
 
 public class MaximizerObject {
 
@@ -11,15 +11,5 @@ public class MaximizerObject {
             }
         }
         return items[maxDogIndex];
-    }
-
-    public static void main(String[] args) {
-        Dog[] dogs = {
-                new Dog("Elyse", 3),
-                new Dog("Sture", 9),
-                new Dog("Arte", 15)
-        };
-        Dog maxDog = (Dog) max(dogs);
-        maxDog.bark();
     }
 }

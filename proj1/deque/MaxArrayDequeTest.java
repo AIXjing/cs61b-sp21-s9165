@@ -1,6 +1,5 @@
 package deque;
 
-import org.apache.commons.collections.comparators.ComparableComparator;
 import org.junit.Test;
 
 import java.util.Comparator;
@@ -15,10 +14,14 @@ public class MaxArrayDequeTest {
 
     @Test
     public void maxTest1() {
+        Comparator<Integer> arrayDequeComparator = new ArrayDequeComparator();
         MaxArrayDeque<Integer> maxDeque =
-//                new MaxArrayDeque<>(createCMP(a -> a));
-                new MaxArrayDeque<>((c1, c2) -> c1 - c2);
-            new MaxArrayDeque<>(new ComparableComparator());
+                new MaxArrayDeque<>(arrayDequeComparator);
+        /*
+            Other approach:
+            1. new MaxArrayDeque<>(createCMP(a -> a));
+            2. new MaxArrayDeque<>((c1, c2) -> c1 - c2);
+         */
         for (int i = 0; i < 10; i++) {
             maxDeque.addFirst(i);
         }
@@ -29,8 +32,8 @@ public class MaxArrayDequeTest {
     }
 
     @Test
-    public void maxTest2(){
-        MaxArrayDeque<Integer> ald1 = new MaxArrayDeque<Integer>(new ComparableComparator());
+    public void maxTest2() {
+        MaxArrayDeque<Integer> ald1 = new MaxArrayDeque<Integer>(new ArrayDequeComparator());
         for (int i = 0; i < 1000000; i++) {
             ald1.addLast(i);
         }
@@ -46,13 +49,18 @@ public class MaxArrayDequeTest {
         System.out.println(ald1.max());
     }
 
-
     @Test
     public void maxStudentTest() {
         MaxArrayDeque<Student> maxDeque =
                 new MaxArrayDeque<Student>(Comparator.comparingInt(Student::score).reversed());
 //                new MaxArrayDeque<>((c1, c2) -> c1.score() - c2.score());
 //                new MaxArrayDeque<Student>(createCMP(a -> a.score()));
+    }
+
+    private static class ArrayDequeComparator implements Comparator<Integer> {
+        public int compare(Integer o1, Integer o2) {
+            return o1.compareTo(o2);
+        }
     }
 
     private record Student(

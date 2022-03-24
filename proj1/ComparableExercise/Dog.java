@@ -1,6 +1,13 @@
 package ComparableExercise;
 
-public class Dog implements OurComparable{
+/*
+ For more details about comparator, please refer to this video:
+ https://www.youtube.com/watch?v=1oow3NGoExg&list=PL8FaHk7qbOD56r1sGUGifsfC0KRDAsuZ3&index=7
+ */
+
+import java.util.Comparator;
+
+public class Dog implements Comparable<Dog> {
     private String name;
     private int size;
 
@@ -14,13 +21,31 @@ public class Dog implements OurComparable{
     }
 
     @Override
-    public int compareTo(Object o) {
-        Dog uddaDog = (Dog) o;
-        if (this.size < uddaDog.size) {
-            return -1;
-        } else if (this.size > uddaDog.size) {
-            return 1;
+    public int compareTo(Dog uddaDog) {
+        return this.size - uddaDog.size;
+    }
+
+    public static Comparator<Dog> getNameComparator() {
+        return new NameComparator();
+    }
+
+    public static Comparator<Dog> getSizeComparator() {
+        return new SizeComparator();
+    }
+
+    /* Created a nested comparator class to specify the way to compare names */
+    private static class NameComparator implements Comparator<Dog> {
+        public int compare(Dog a, Dog b) {
+            return a.name.compareTo(b.name);
         }
-        return 0;
+    }
+
+    /* Created a nested comparator class to specify the way to compare names */
+    private static class SizeComparator implements Comparator<Dog> {
+        public int compare(Dog a, Dog b) {
+            Integer sizeA = a.size;
+            Integer sizeB = b.size;
+            return sizeA.compareTo(sizeB); // compareTo does not work for primitive data type
+        }
     }
 }

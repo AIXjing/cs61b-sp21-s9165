@@ -1,4 +1,4 @@
-package ComparableExercise;
+package OurComparableExecise;
 
 public class MaximizerDog {
 
