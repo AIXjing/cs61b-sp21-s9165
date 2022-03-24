@@ -1,4 +1,4 @@
-package ComparableExercise;
+package comparableExercise;
 
 /*
  For more details about comparator, please refer to this video:
@@ -16,6 +16,14 @@ public class Dog implements Comparable<Dog> {
         this.size = size;
     }
 
+    public static Comparator<Dog> getNameComparator() {
+        return new NameComparator();
+    }
+
+    public static Comparator<Dog> getSizeComparator() {
+        return new SizeComparator();
+    }
+
     public void bark() {
         System.out.println(name + " say: bark!");
     }
@@ -23,14 +31,6 @@ public class Dog implements Comparable<Dog> {
     @Override
     public int compareTo(Dog uddaDog) {
         return this.size - uddaDog.size;
-    }
-
-    public static Comparator<Dog> getNameComparator() {
-        return new NameComparator();
-    }
-
-    public static Comparator<Dog> getSizeComparator() {
-        return new SizeComparator();
     }
 
     /* Created a nested comparator class to specify the way to compare names */

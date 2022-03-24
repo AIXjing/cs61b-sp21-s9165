@@ -1,4 +1,4 @@
-package OurComparableExecise;
+package ourComparableExecise;
 
 public class MaximizerDog {
 
@@ -10,7 +10,7 @@ public class MaximizerDog {
                 maxDogIndex = i;
             }
         }
-       return dogs[maxDogIndex];
+        return dogs[maxDogIndex];
     }
 
     public static void main(String[] args) {

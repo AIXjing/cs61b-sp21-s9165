@@ -1,4 +1,4 @@
-package ComparableExercise;
+package comparableExercise;
 
 public class Maximizer {
 

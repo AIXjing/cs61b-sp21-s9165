@@ -1,6 +1,6 @@
-package OurComparableExecise;
+package ourComparableExecise;
 
-public class Dog implements OurComparable{
+public class Dog implements OurComparable {
     private String name;
     private int size;
 
@@ -16,7 +16,6 @@ public class Dog implements OurComparable{
     public int compareTo(Object o) {
         Dog uddaDog = (Dog) o;
         return this.size - uddaDog.size;
-
 //        if (this.size < uddaDog.size) {
 //            return -1;
 //        } else if (this.size > uddaDog.size) {

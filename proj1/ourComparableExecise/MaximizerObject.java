@@ -1,4 +1,4 @@
-package OurComparableExecise;
+package ourComparableExecise;
 
 public class MaximizerObject {
 
