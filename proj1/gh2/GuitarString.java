@@ -6,7 +6,8 @@ import deque.LinkedListDeque;
 // Note: This file will not compile until you complete the Deque implementations
 public class GuitarString {
     /**
-     * Constants. Do not change. In case you're curious, the keyword final means the values cannot be
+     * Constants. Do not change. In case you're curious,
+     * the keyword final means the values cannot be
      * changed at runtime. We'll discuss this and other topics in lecture on Friday.
      */
     private static final int SR = 44100; // Sampling Rate

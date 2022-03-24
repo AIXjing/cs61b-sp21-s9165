@@ -164,7 +164,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         private final ArrayDeque<T> inner;
         private int currentPosition;
 
-        public ArrayDequeIterator(ArrayDeque<T> inner) {
+        private ArrayDequeIterator(ArrayDeque<T> inner) {
             this.inner = inner;
             currentPosition = 0;
         }

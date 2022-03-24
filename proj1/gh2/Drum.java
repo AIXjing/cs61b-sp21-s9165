@@ -40,8 +40,7 @@ public class Drum {
         double flip = 0.0;
         if (rand < 0.5) {
             flip = 1.0;
-        }
-        else {
+        } else {
             flip = -1.0;
         }
         Double newSample = flip * (buffer.get(1) + buffer.get(2)) / 2.0 * DECAY;
