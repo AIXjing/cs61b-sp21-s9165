@@ -146,7 +146,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      * https://www.youtube.com/watch?v=Gv6LjusNBU0&list=PL8FaHk7qbOD4vPE_Bd8QagarKi3kPw8rB&index=4
      */
 
-    /* To return an Iterator, we need to build a class that implement Iterator */
+    /* To return a  n Iterator, we need to build a class that implement Iterator */
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
