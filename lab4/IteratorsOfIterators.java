@@ -45,7 +45,7 @@ public class IteratorsOfIterators implements Iterator<Integer> {
         return ans;
     }
 
-    public static void main (String args[]) {git
+    public static void main (String args[]) {
         Integer[] listA = {1,3,4,5};
         Integer[] listB = {};
         Integer[] listC = {2};
