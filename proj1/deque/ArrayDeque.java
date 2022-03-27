@@ -13,7 +13,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      * Creates an empty list.
      */
     public ArrayDeque() {
-        this.items = (T[]) new Object[8];
+        this.items =  (T[]) new Object[8];
         this.head = 0;
         this.tail = 1;
         this.size = 0;
@@ -141,8 +141,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         tail = size + 1;
     }
 
+    /**
+     * Check out this video for more details about Iterator implementation
+     * https://www.youtube.com/watch?v=Gv6LjusNBU0&list=PL8FaHk7qbOD4vPE_Bd8QagarKi3kPw8rB&index=4
+     */
+
+    /* To return an Iterator, we need to build a class that implement Iterator */
     public Iterator<T> iterator() {
-        return new ArrayDequeIterator<>(this);
+        return new ArrayDequeIterator();
     }
 
     public boolean equals(Object o) {
@@ -160,30 +166,23 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return true;
     }
 
-    private static class ArrayDequeIterator<T> implements Iterator<T> {
-        private final ArrayDeque<T> inner;
-        private int currentPosition;
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int currPos;
 
-        private ArrayDequeIterator(ArrayDeque<T> inner) {
-            this.inner = inner;
-            currentPosition = 0;
+        private ArrayDequeIterator() {
+            currPos = 0;
         }
 
         @Override
         public boolean hasNext() {
-            if (currentPosition < inner.size()) {
-                return true;
-            }
-            return false;
+            return currPos < size;
         }
 
         @Override
         public T next() {
-            if (currentPosition > inner.size() - 1) {
-//        throw new NoSuchElementException();
-                return null;
-            }
-            return inner.get(currentPosition++);
+            T currItem = (T) get(currPos);
+            currPos++;
+            return currItem;
         }
     }
 }

@@ -126,7 +126,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-        return new LinkedListDequeIterator<T>(this);
+        return new LinkedListDequeIterator();
     }
 
     public boolean equals(Object o) {
@@ -144,34 +144,27 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return true;
     }
 
-    private static class LinkedListDequeIterator<T> implements Iterator<T> {
-        private final LinkedListDeque<T> inner;
-        private int currPosition;
+    /* create a nested class implements Iterator interface */
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private int currPos;
 
-        public LinkedListDequeIterator(LinkedListDeque<T> linkedDeque) {
-            this.inner = linkedDeque;
-            this.currPosition = 0;
+        public LinkedListDequeIterator() {
+            this.currPos = 0;
         }
 
         @Override
         public boolean hasNext() {
-            if (currPosition < inner.size()) {
-                return true;
-            }
-            return false;
+            return currPos < size();
         }
 
         @Override
         public T next() {
-            if (currPosition > inner.size() - 1) {
-                return null;
-            }
-            return inner.get(currPosition++);
+            return get(currPos++);
         }
     }
 
     private class IntNode {
-        private T item;
+        private final T item;
         private IntNode next;
         private IntNode prev;
 

@@ -3,6 +3,8 @@ package deque;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -139,6 +141,15 @@ public class ArrayDequeTest {
             if (i % 2 == 0) arrDeque.addFirst(i + ". addFirst");
             else arrDeque.addLast(i + ". addLast");
         }
+
+        /* So-called ugly iterator */
+        Iterator<String> arrDequeIter = arrDeque.iterator();
+        while (arrDequeIter.hasNext()) {
+            System.out.println(arrDequeIter.next());
+        }
+
+        /* nice iterator!
+         * Because ArrayDeque implements Iterable, we are allowed to use arrDeque in such way */
         for (String s : arrDeque) {
             System.out.println(s);
         }
