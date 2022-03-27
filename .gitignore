@@ -6,7 +6,6 @@
 !**/pom.xml
 !.fatweleminus
 !.gitignore
-!library-sp21
 !foods.csv
 *.class
 *.log
@@ -95,6 +94,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+library-sp21/
 lib64/
 parts/
 sdist/
@@ -390,3 +390,4 @@ tramp
 !byow/**/*.mp4
 !byow/**/*.gif
 !byow/**/*.wav
+library-sp21/
