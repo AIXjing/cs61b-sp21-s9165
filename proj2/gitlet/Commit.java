@@ -2,6 +2,8 @@ package gitlet;
 
 // TODO: any imports you need here
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date; // TODO: You'll likely use this in this class
 
 /** Represents a gitlet commit object.
@@ -18,9 +20,32 @@ public class Commit {
      * comment above them describing what that variable represents and how that
      * variable is used. We've provided one example for `message`.
      */
-
-    /** The message of this Commit. */
+    private String commitId;
+    private String timestamp; //TODO:
     private String message;
+    private String parentCommitId;
+    private String fileName;
+    private String blob;
+    private String branch;
+    private boolean isHead;
 
-    /* TODO: fill in the rest of this class. */
+    public Commit(
+            String message,
+            String parentCommitId,
+            String fileName,
+            String blob,
+            String branch,
+            boolean isHead) {
+        // generate current timestamp
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss, z, dd MMMM yyyy");
+        this.timestamp = formatter.format(new Date());
+        this.message = message;
+        // generate commitId SHA-1
+        this.commitId = Utils.sha1(message, timestamp);
+        this.parentCommitId = parentCommitId;
+        this.fileName = fileName;
+        this.blob = blob;
+        this.branch = branch;
+        this.isHead = isHead;
+    }
 }

@@ -1,15 +1,18 @@
 package gitlet;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import static gitlet.Utils.*;
 
 // TODO: any imports you need here
 
-/** Represents a gitlet repository.
+/**
+ * Represents a gitlet repository.
  *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ * @author TODO
  */
 public class Repository {
     /**
@@ -20,10 +23,46 @@ public class Repository {
      * variable is used. We've provided two examples for you.
      */
 
-    /** The current working directory. */
+    /**
+     * The current working directory.
+     */
     public static final File CWD = new File(System.getProperty("user.dir"));
-    /** The .gitlet directory. */
+    /**
+     * The .gitlet directory.
+     */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
+    private static String DEFAULT_BRANCH = "main";
+
     /* TODO: fill in the rest of this class. */
+    public static void init() {
+        if (GITLET_DIR.exists()) {
+            throw new IllegalArgumentException("has been initialized.");
+        }
+        GITLET_DIR.mkdir();
+
+        // create an initial commit
+        Commit initCommit = new Commit(
+                "initial commit",
+                null,
+                null,
+                null,
+                DEFAULT_BRANCH,
+                true
+        );
+
+        // store the object into a file
+        String sha1_initiCommit = sha1(initCommit);
+        String firstTwoChars = sha1_initiCommit.substring(0,2);
+        String initCommitFileName = sha1_initiCommit.substring(2);
+        File inFile = Utils.join(GITLET_DIR, "objects", firstTwoChars, initCommitFileName);
+        try {
+            inFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Utils.writeObject(inFile, (Serializable) initCommit);
+        String s = Utils.readContentsAsString(inFile);
+        System.out.println(s);
+    }
 }
