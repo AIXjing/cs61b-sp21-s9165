@@ -66,7 +66,7 @@ public class Dog implements Serializable { // TODO
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Utils.writeContents(dogFile, serialize(this));
+        Utils.writeContents(dogFile, (Object) serialize(this));
     }
 
     @Override

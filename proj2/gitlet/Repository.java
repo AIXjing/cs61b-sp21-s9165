@@ -2,7 +2,8 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
+import java.util.TimeZone;
+
 import static gitlet.Utils.*;
 
 // TODO: any imports you need here
@@ -14,7 +15,7 @@ import static gitlet.Utils.*;
  *
  * @author TODO
  */
-public class Repository {
+public class Repository{
     /**
      * TODO: add instance variables here.
      *
@@ -32,9 +33,9 @@ public class Repository {
      */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
-    private static String DEFAULT_BRANCH = "main";
+    private static final String DEFAULT_BRANCH = sha1("main");
 
-    /* TODO: fill in the rest of this class. */
+    /* implement gitlet init */
     public static void init() {
         if (GITLET_DIR.exists()) {
             throw new IllegalArgumentException("has been initialized.");
@@ -42,6 +43,7 @@ public class Repository {
         GITLET_DIR.mkdir();
 
         // create an initial commit
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Commit initCommit = new Commit(
                 "initial commit",
                 null,
@@ -50,19 +52,45 @@ public class Repository {
                 DEFAULT_BRANCH,
                 true
         );
+        storeCommit(initCommit);
+    }
 
-        // store the object into a file
-        String sha1_initiCommit = sha1(initCommit);
-        String firstTwoChars = sha1_initiCommit.substring(0,2);
-        String initCommitFileName = sha1_initiCommit.substring(2);
-        File inFile = Utils.join(GITLET_DIR, "objects", firstTwoChars, initCommitFileName);
+    /* Implement gitlet add (only one file at time) */
+    public void add (File fileForAddition) {
+        File index = new File(GITLET_DIR, "index");
+        if(!index.exists()) {
+            createFile(index);
+        }
+        
+    }
+
+
+    /* store the object into a file */
+    private static void storeCommit(Commit commit) {
+        // step 1: extract the first two chars as the folder under .gitlet/objects
+        String commitId = commit.getCommitId();
+        String commit_folderName = commitId.substring(0,2);
+        // step 2: use the rest of chars as the file name to store serialized initCommit
+        String commit_fileName = commitId.substring(2);
+        // step 3: create corresponding folders and files
+        File objects = new File(GITLET_DIR, "objects");
+        objects.mkdir();
+        File folder_for_initCommit = new File(objects, commit_folderName);
+        folder_for_initCommit.mkdir();
+        File file_for_initCommit = new File(folder_for_initCommit, commit_fileName);
+        createFile(file_for_initCommit);
+
+
+        Utils.writeObject(file_for_initCommit, commit);
+        Commit init = Utils.readObject(file_for_initCommit, Commit.class);
+        System.out.println(init.toString());
+    }
+
+    private static void createFile(File file) {
         try {
-            inFile.createNewFile();
+            file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Utils.writeObject(inFile, (Serializable) initCommit);
-        String s = Utils.readContentsAsString(inFile);
-        System.out.println(s);
     }
 }
