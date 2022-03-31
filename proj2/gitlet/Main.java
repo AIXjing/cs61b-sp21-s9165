@@ -1,5 +1,6 @@
 package gitlet;
 
+import java.io.File;
 import java.util.TimeZone;
 
 /**
@@ -13,8 +14,12 @@ public class Main {
      * Usage: java gitlet.Main ARGS, where ARGS contains
      * <COMMAND> <OPERAND1> <OPERAND2> ...
      * Runs one of the following commands:
-     * init -- create .gitlet directory in the current working directory
-     * Additionally, create an initial commit
+     * init --
+     *          create .gitlet directory in the current working directory. Additionally, create an initial commit
+     * add [filename] --
+     *          write the file into the index file which is a staging area.
+     *          If the file has already been staged, do nothing.
+     *          If the file has been commit, do not need to commit
      */
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -29,9 +34,13 @@ public class Main {
                 break;
             case "add":
                 // TODO: handle the `add [filename]` command
+                validateNumArgs("init", args, 1);
+                Repository.add(new File(args[1]));
                 break;
             case "commit":
-                // TODO: handle the `add [filename]` command
+                // TODO: handle the `commit "message"` command
+                validateNumArgs("init", args, 1);
+                Repository.commit(args[1]);
                 break;
             // TODO: FILL THE REST IN
         }

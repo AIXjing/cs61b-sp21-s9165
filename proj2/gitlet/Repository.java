@@ -2,6 +2,8 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import static gitlet.Utils.*;
@@ -24,16 +26,10 @@ public class Repository{
      * variable is used. We've provided two examples for you.
      */
 
-    /**
-     * The current working directory.
-     */
     public static final File CWD = new File(System.getProperty("user.dir"));
-    /**
-     * The .gitlet directory.
-     */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
-
-    private static final String DEFAULT_BRANCH = sha1("main");
+    public static File index = join(GITLET_DIR, "index");  // store fileForAddition
+    public static File objects = join(GITLET_DIR, "objects"); // store commits
 
     /* implement gitlet init */
     public static void init() {
@@ -41,28 +37,56 @@ public class Repository{
             throw new IllegalArgumentException("has been initialized.");
         }
         GITLET_DIR.mkdir();
-
         // create an initial commit
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        Commit initCommit = new Commit(
-                "initial commit",
-                null,
-                null,
-                null,
-                DEFAULT_BRANCH,
-                true
-        );
+        HashMap<String, String> branchMap = new HashMap<>();
+        branchMap.put("main", sha1("main"));
+        HashMap<String, String> headMap = new HashMap<>();
+        headMap.put("HEAD", sha1("HEAD"));
+        Commit initCommit = new Commit(branchMap, headMap);
+        //TODO: need to create file and folder to store branch and HEAD
+        /** .gitlet -- refs -- heads -- main (store sha1)
+         *                  -- remotes -- origin -- main (store sha1, the same as heads/main)
+         *                             -- skeleton
+         *          -- HEAD -- "ref: refs/heads/main"
+         * */
         storeCommit(initCommit);
     }
 
     /* Implement gitlet add (only one file at time) */
-    public void add (File fileForAddition) {
-        File index = new File(GITLET_DIR, "index");
+    public static void add (File file) {
         if(!index.exists()) {
             createFile(index);
+            // Adds a copy of the file as it currently exists to the staging area
+            FileForAddition fileForAddition = new FileForAddition(file);
+            writeObject(index, fileForAddition);
+            // To test whether the fileForAddition object has been written into index
+            FileForAddition readedFile = readObject(index, FileForAddition.class);
+            System.out.println(readedFile.getFile().getName());
         }
-        
+        /* Compare the added file with the staged file */
+        FileForAddition readedFile = readObject(index, FileForAddition.class);
+        if (readedFile.getFile().equals(file)) {
+            try {
+                throw new IOException("The file has already been staged.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    /* to implement commit operation */
+    public static void commit(String message) {
+        Commit commit = new Commit(
+                message,
+                parentCommitId,
+                String fileName,
+                String blob,
+                String branch,
+        boolean isHead
+                )
+    }
+
 
 
     /* store the object into a file */
@@ -73,14 +97,11 @@ public class Repository{
         // step 2: use the rest of chars as the file name to store serialized initCommit
         String commit_fileName = commitId.substring(2);
         // step 3: create corresponding folders and files
-        File objects = new File(GITLET_DIR, "objects");
         objects.mkdir();
         File folder_for_initCommit = new File(objects, commit_folderName);
         folder_for_initCommit.mkdir();
         File file_for_initCommit = new File(folder_for_initCommit, commit_fileName);
         createFile(file_for_initCommit);
-
-
         Utils.writeObject(file_for_initCommit, commit);
         Commit init = Utils.readObject(file_for_initCommit, Commit.class);
         System.out.println(init.toString());
