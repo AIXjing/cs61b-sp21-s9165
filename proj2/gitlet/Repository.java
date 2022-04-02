@@ -63,29 +63,30 @@ public class Repository{
             // To test whether the fileForAddition object has been written into index
             FileForAddition readedFile = readObject(index, FileForAddition.class);
             System.out.println(readedFile.getFile().getName());
-        }
-        /* Compare the added file with the staged file */
-        FileForAddition readedFile = readObject(index, FileForAddition.class);
-        if (readedFile.getFile().equals(file)) {
-            try {
-                throw new IOException("The file has already been staged.");
-            } catch (IOException e) {
-                e.printStackTrace();
+        } else {
+            /* Compare the added file with the staged file */
+            FileForAddition readedFile = readObject(index, FileForAddition.class);
+            if (readedFile.getFile().equals(file)) {
+                try {
+                    throw new IOException("The file has already been staged.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     /* to implement commit operation */
-    public static void commit(String message) {
-        Commit commit = new Commit(
-                message,
-                parentCommitId,
-                String fileName,
-                String blob,
-                String branch,
-        boolean isHead
-                )
-    }
+//    public static void commit(String message) {
+//        Commit commit = new Commit(
+//                message,
+//                parentCommitId,
+//                String fileName,
+//                String blob,
+//                String branch,
+//        boolean isHead
+//                )
+//    }
 
 
 

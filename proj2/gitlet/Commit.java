@@ -61,7 +61,10 @@ public class Commit implements Serializable {
         this.parentCommitId = null;
         this.file = null;
         this.branchMap = branchMap;
+        // create a refs/heads/main file to store branch
+        storeBranch(branchMap);
         this.headMap = headMap;
+        // create a HEAD file
     }
 
     public String getCommitId() {
@@ -78,7 +81,12 @@ public class Commit implements Serializable {
     @Override
     public String toString(){
         return "Commit " + commitId + "\n"
-                + timestamp + "\n"
+                + date + "\n"
                 + "     " + message + "\n";
+    }
+
+    // store branch in refs/heads/main file
+    private void storeBranch() {
+
     }
 }

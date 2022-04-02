@@ -34,13 +34,13 @@ public class Main {
                 break;
             case "add":
                 // TODO: handle the `add [filename]` command
-                validateNumArgs("init", args, 1);
+                validateNumArgs("add", args, 2);
                 Repository.add(new File(args[1]));
                 break;
             case "commit":
                 // TODO: handle the `commit "message"` command
-                validateNumArgs("init", args, 1);
-                Repository.commit(args[1]);
+                validateNumArgs("commit", args, 1);
+                // Repository.commit(args[1]);
                 break;
             // TODO: FILL THE REST IN
         }
