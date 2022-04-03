@@ -2,6 +2,7 @@ package gitlet;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,29 +60,61 @@ public class Repository{
             createFile(index);
             FileForAddition fileForAddition = new FileForAddition(file);
             fileForAddition.initAdd();
-//            FileForAddition readedFile = readObject(index, FileForAddition.class);
-//            readedFile.initAdd();
         } else {
             // Compare the added file with the staged file
+            // create a new instance with the file
+            FileForAddition addedFile = new FileForAddition(file);
+
             /* Read the file content from index and compare with new added file */
-            FileForAddition readedFile = readObject(index, FileForAddition.class);
+            /* As the last added file information has been stored in index, we need to read information from index first */
+//            FileForAddition readedFile = readObject(index, FileForAddition.class);
+            // Extract file content based on the information extracted from inde
+            File indexFile = readObject(index, File.class);
+            boolean isTwoEqual = false;
+            try {
+                isTwoEqual = FileUtils.contentEquals(indexFile, file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //TODO: why readStagedFile does not return a string.
+//        File stagedFile = new File(objects + "/" + getBlob().substring(0,2) + "/" + getBlob().substring(2));
+//        String stagedFileContent = readContentsAsString(stagedFile);
+//        String addedFileContent = readContentsAsString(file);
+//        System.out.println("staged file content: " + stagedFileContent);
+//        System.out.println("added file content: " + addedFileContent);
+            if (!isTwoEqual) {
+                System.out.println("The file has been updated! Let's stage new file.");
+            }
+            else {
+                System.out.println("No change is made.");
+            }
+//            String prevBlob = readedFile.getBlob();
+//            File prevBlob_folder = new File(objects, prevBlob.substring(0,2));
+//            File prevBlob_file = new File(prevBlob_folder, prevBlob.substring(2));
+//            File prevFile = readObject(prevBlob_file, File.class);
+//
 //            String content1 = null;
 //            try {
-//                content1 = Files.toString(readedFile.getFile(), Charsets.UTF_8);
+//                content1 = Files.toString(prevFile, Charsets.UTF_8);
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
 //            System.out.println("staged file content: " + content1);
 //
+//            String currBlob = addedFile.getBlob();
+//            File currBlob_folder = new File(objects, currBlob.substring(0,2));
+//            File currBlob_file = new File(currBlob_folder, prevBlob.substring(2));
+//            File currFile = readObject(currBlob_file, File.class);
+//
 //            String content2 = null;
 //            try {
-//                content2 = Files.toString(file, Charsets.UTF_8);
+//                content2 = Files.toString(currFile, Charsets.UTF_8);
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
 //            System.out.println("added file content: " + content2);
 
-            readedFile.add(file);
+//            readedFile.add(file);
         }
     }
 

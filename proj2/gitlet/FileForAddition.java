@@ -3,10 +3,6 @@ package gitlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.common.base.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -17,28 +13,28 @@ import static gitlet.Utils.*;
 public class FileForAddition implements Serializable {
      private final File file;
      private final String blob;
-    private final Map<File, String> fileMap = new HashMap<>();
+//    private final Map<File, String> fileMap = new HashMap<>();
 
     public FileForAddition(File file) {
         // create a sha1 for the staged file
-        this.file = fil
-        String blob = sha1((Object) serialize(file));
-        fileMap.put(file, blob);
-        storeBlob();  // store blob in objects
+        this.file = file;
+        this.blob = sha1((Object) serialize(file));
+//        fileMap.put(file, blob);
+        storeBlob();  // store blob in .gitlet/objects
     }
 
     public void initAdd() {
-        writeObject(index, this);
-        System.out.println(getFile().getName());
+        writeObject(index, file);
         /* print out file content */
         String content = null;
         try {
-            content = com.google.common.io.Files.toString(getFile(), Charsets.UTF_8);
+            content = com.google.common.io.Files.toString(this.file, Charsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("The initially staged file content: " + content);
-        System.out.println("Blob: " + getBlob());
+        System.out.println("Blob: " + this.blob);
+        storeBlob();
         // if the current working version of the file is identical to the version in the current commit,
         // do not stage it to be added, and remove it from the staging area
         // Step 1: compare whether the added File
@@ -52,16 +48,22 @@ public class FileForAddition implements Serializable {
         // overwrites the previous entry in the staging area with the new contents
     }
 
-    public void add(File file) {
+    public static void add(File file) {
         /* check the added file whether it has the same content as previous staged file by searching the blob */
-        FileForAddition newAddedFileForStage = new FileForAddition(file);
+        File indexFile = readObject(index, File.class);
+        boolean isTwoEqual = false;
+        try {
+            isTwoEqual = FileUtils.contentEquals(indexFile, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //TODO: why readStagedFile does not return a string.
-        File stagedFile = new File(objects + "/" + getBlob().substring(0,2) + "/" + getBlob().substring(2));
-        String stagedFileContent = readContentsAsString(stagedFile);
-        String addedFileContent = readContentsAsString(file);
-        System.out.println("staged file content: " + stagedFileContent);
-        System.out.println("added file content: " + addedFileContent);
-        if (!stagedFileContent.equals(addedFileContent)) {
+//        File stagedFile = new File(objects + "/" + getBlob().substring(0,2) + "/" + getBlob().substring(2));
+//        String stagedFileContent = readContentsAsString(stagedFile);
+//        String addedFileContent = readContentsAsString(file);
+//        System.out.println("staged file content: " + stagedFileContent);
+//        System.out.println("added file content: " + addedFileContent);
+        if (!isTwoEqual) {
             System.out.println("The file has been updated! Let's stage new file.");
         }
         else {
@@ -81,15 +83,12 @@ public class FileForAddition implements Serializable {
 
     /* get file in the Map */
     public File getFile() {
-        for (File file : fileMap.keySet()) {
-            return file;
-        }
-        return null;
+        return this.file;
     }
 
     /* get blob in the Map */
     public String getBlob() {
-        return fileMap.get(getFile());
+        return this.blob;
     }
 
     public boolean isCommitted() {
@@ -107,8 +106,8 @@ public class FileForAddition implements Serializable {
     }
 
     private void storeBlob(){
-        String blob_folderName = getBlob().substring(0,2);
-        String blob_fileName = getBlob().substring(2);
+        String blob_folderName = this.blob.substring(0,2);
+        String blob_fileName = this.blob.substring(2);
         File blob_dir = new File(objects, blob_folderName);
         if(!blob_dir.exists()) {
             blob_dir.mkdir();
@@ -117,7 +116,7 @@ public class FileForAddition implements Serializable {
         if (!blobFile.exists()) {
             createFile(blobFile);
         }
-        writeObject(blobFile, this.getFile());
+        writeObject(blobFile, this.file);
         String content = readContentsAsString(blobFile);
         System.out.println("The saved file content in Blob: " + content);
     }
