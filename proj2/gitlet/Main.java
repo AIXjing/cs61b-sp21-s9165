@@ -39,8 +39,8 @@ public class Main {
                 break;
             case "commit":
                 // TODO: handle the `commit "message"` command
-                validateNumArgs("commit", args, 1);
-                // Repository.commit(args[1]);
+                validateNumArgs("commit", args, 3);
+//                Repository.commit(args[1], args[2]);
                 break;
             // TODO: FILL THE REST IN
         }

@@ -6,9 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import static gitlet.Utils.*;
 
@@ -34,7 +32,11 @@ public class Repository{
     public static final File CWD = new File(System.getProperty("user.dir"));
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     public static final File index = join(GITLET_DIR, "index");  // store fileForAddition
-    public static File objects = join(GITLET_DIR, "objects"); // store commits
+    public static File objects = join(GITLET_DIR, "objects"); // store commit lists and file blobs
+    public static final File commits = join(objects, "commits"); // store commits
+    public static ListOfCommits<Commit> listOfCommits = new ListOfCommits<>();
+    public static StageIndex stage = new StageIndex(new ArrayList<FileBlob>(),new ArrayList<FileBlob>());
+    public static File head = join(GITLET_DIR, "head"); // store a path referring to the current branch and commit
 
     /* implement gitlet init */
     public static void init() {
@@ -45,77 +47,46 @@ public class Repository{
         // create an initial commit
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         objects.mkdir();
-        Commit initCommit = new Commit("main");  // main branch is created by default in gitlet init
-        /** .gitlet -- refs -- heads -- main (store sha1)
-         *                  -- remotes -- origin -- main (store sha1, the same as heads/main)
-         *                             -- skeleton
-         *          -- HEAD -- "ref: refs/heads/main"
-         * */
+        try {
+            commits.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Commit initCommit = new Commit("init commit", null);
+        listOfCommits.addLast(initCommit);
+    }
+
+    /* implement gitlet add */
+    public static void commit(File file, String message){
+        // check whether the file has already in the StageIndex instance
+
+
+//        listOfCommits.addLast(commit);
     }
 
     /* Implement gitlet add (only one file at time) */
-    public static void add (File file) {
+    public static void add(File file) {
         // check if it is the first time to use gitlet add
         if(!index.exists()) {
             createFile(index);
-            FileForAddition fileForAddition = new FileForAddition(file);
-            fileForAddition.initAdd();
-        } else {
-            // Compare the added file with the staged file
-            // create a new instance with the file
-            FileForAddition addedFile = new FileForAddition(file);
-
-            /* Read the file content from index and compare with new added file */
-            /* As the last added file information has been stored in index, we need to read information from index first */
-//            FileForAddition readedFile = readObject(index, FileForAddition.class);
-            // Extract file content based on the information extracted from inde
-            File indexFile = readObject(index, File.class);
-            boolean isTwoEqual = false;
-            try {
-                isTwoEqual = FileUtils.contentEquals(indexFile, file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //TODO: why readStagedFile does not return a string.
-//        File stagedFile = new File(objects + "/" + getBlob().substring(0,2) + "/" + getBlob().substring(2));
-//        String stagedFileContent = readContentsAsString(stagedFile);
-//        String addedFileContent = readContentsAsString(file);
-//        System.out.println("staged file content: " + stagedFileContent);
-//        System.out.println("added file content: " + addedFileContent);
-            if (!isTwoEqual) {
-                System.out.println("The file has been updated! Let's stage new file.");
-            }
-            else {
-                System.out.println("No change is made.");
-            }
-//            String prevBlob = readedFile.getBlob();
-//            File prevBlob_folder = new File(objects, prevBlob.substring(0,2));
-//            File prevBlob_file = new File(prevBlob_folder, prevBlob.substring(2));
-//            File prevFile = readObject(prevBlob_file, File.class);
-//
-//            String content1 = null;
-//            try {
-//                content1 = Files.toString(prevFile, Charsets.UTF_8);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("staged file content: " + content1);
-//
-//            String currBlob = addedFile.getBlob();
-//            File currBlob_folder = new File(objects, currBlob.substring(0,2));
-//            File currBlob_file = new File(currBlob_folder, prevBlob.substring(2));
-//            File currFile = readObject(currBlob_file, File.class);
-//
-//            String content2 = null;
-//            try {
-//                content2 = Files.toString(currFile, Charsets.UTF_8);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("added file content: " + content2);
-
-//            readedFile.add(file);
         }
+        writeObject(index, stage);
+        // TODO: check if the file content is the same as the one stored in the commit on the HEAD branch
+        // To simplify, I extract the latest commit file to compare
+        Commit latestCommit = listOfCommits.getLastCommit();
+        byte[] fileContent = null;
+        FileBlob committedFile = null;
+        if (latestCommit != null) {
+            committedFile = latestCommit.getFileBlob();
+            // read the content of the file to byte[]
+            fileContent = Utils.readContents(file);
+            if (Arrays.equals(fileContent, committedFile.getFileContent())) {
+                System.out.println("Nothing to commit");
+            }
+        }
+          // add fileBlob to StageIndex instance and write fileBlob to index file
+            FileBlob fileBlobForAddition = new FileBlob(file);
+            stage.addFileBlob(fileBlobForAddition);
     }
 
     /* to implement commit operation */
