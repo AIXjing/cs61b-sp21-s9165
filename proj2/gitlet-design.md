@@ -100,4 +100,13 @@ Note that the file in the commit instance should have been stored in StageIndex 
  */
 ```
 
+**Self-reflection**
+
+Instance itself does not store data. If instance is not written to a file, every time to call the instance and run main method, a new instance will be created.
+To make instance persistent, we need to write this instance to a file, that is, to ask file to store what in this instance.
+Every time when we want to update the instance, first we need to read the current stored instance, then do something, and write updated instance to the file.
+
+Following above algorithm, when add file to staging area (StageIndex), we also need to read the StageIndex instance from the index file first, and then to see whether we need to add or not by reading ListOfCommit instance from commits file.
+If the StageIndex is updated, then the updated instance will be written into the index file. Similarly, when we want to get the last commit from the ListOfCommit instance, we need to read from the commits file first. 
+And if a new commit is added using `addLast` to the ListOfCommit instance, then write the instance to the commits file.
                     

@@ -29,7 +29,6 @@ public class ListOfCommits<T> implements Serializable {  // A generic type is us
         CommitNode<T> updatedCommitNode = new CommitNode<>(commit, parentCommitNode, null);
         this.commitNode = updatedCommitNode;
         size += 1;
-        writeObject(commits, this);
     }
 
     // add commit on a new branch
@@ -38,19 +37,28 @@ public class ListOfCommits<T> implements Serializable {  // A generic type is us
         CommitNode<T> newCommitNode = new CommitNode<>(commit, null, this.commitNode);
     }
 
-    // get last commitNode
+    // get last commitNode given it is on main branch
+    public CommitNode<T> getLast() {
+        if (commitNode == null) {
+            return null;
+        } else {
+            return commitNode;
+        }
+    }
+
+    // get last commit
     public T getLastCommit() {
         if (commitNode == null) {
             return null;
         } else {
-            return commitNode.item;
+            return getLast().item;
         }
     }
 
 
 
     // nested class
-    private static class CommitNode<T> implements Serializable{
+    public static class CommitNode<T> implements Serializable{
         private final T item;
         private final CommitNode<T> mainNode;
         private final CommitNode<T> stepNode;
@@ -59,6 +67,10 @@ public class ListOfCommits<T> implements Serializable {  // A generic type is us
             this.item = i;
             this.mainNode = mainNode;
             this.stepNode = stepNode;
+        }
+
+        public T getItem() {
+            return item;
         }
     }
 }

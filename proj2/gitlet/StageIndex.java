@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StageIndex implements Serializable {
-    private List<FileBlob> toAdd;
-    private List<FileBlob> toRemove;
+    private ArrayList<FileBlob> toAdd;
+    private ArrayList<FileBlob> toRemove;
 
-    public StageIndex(List<FileBlob> toAdd, List<FileBlob> toRemove) {
+    public StageIndex(ArrayList<FileBlob> toAdd, ArrayList<FileBlob> toRemove) {
         this.toAdd = toAdd;
         this.toRemove = toRemove;
     }
@@ -32,6 +32,6 @@ public class StageIndex implements Serializable {
 
     // to remove file blobs
     public void emptyToAdd(){
-        this.toAdd = null;
+        this.toAdd = new ArrayList<>();
     }
 }

@@ -1,1 +1,2 @@
 Hello, Earth!
+Hello, Mars"

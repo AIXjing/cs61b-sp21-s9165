@@ -2,11 +2,13 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import static gitlet.Utils.*;
-
-// TODO: any imports you need here
 
 /**
  * Represents a gitlet repository.
@@ -15,11 +17,8 @@ import static gitlet.Utils.*;
  *
  * @author TODO
  */
-public class Repository{
+public class Repository {
     /**
-     * TODO: add instance variables here.
-     *
-     *
      * List all instance variables of the Repository class here with a useful
      * comment above them describing what that variable represents and how that
      * variable is used. We've provided two examples for you.
@@ -30,9 +29,9 @@ public class Repository{
     public static final File index = join(GITLET_DIR, "index");  // store fileForAddition
     public static File objects = join(GITLET_DIR, "objects"); // store commit lists and file blobs
     public static final File commits = join(objects, "commits"); // store commits
-    public static ListOfCommits<Commit> listOfCommits = new ListOfCommits<>();
-    public static StageIndex stage = new StageIndex(new ArrayList<FileBlob>(),new ArrayList<FileBlob>());
     public static File head = join(GITLET_DIR, "head"); // store a path referring to the current branch and commit
+    public static ListOfCommits<Commit> listOfCommits = new ListOfCommits<>();
+    public static StageIndex stage = new StageIndex(new ArrayList<FileBlob>(), new ArrayList<FileBlob>());
 
     /* implement gitlet init */
     public static void init() {
@@ -50,61 +49,74 @@ public class Repository{
         }
         Commit initCommit = new Commit("init commit", null);
         listOfCommits.addLast(initCommit);
+        writeObject(commits, listOfCommits);
     }
 
     /* Implement gitlet add (only one file at time) */
     public static void add(File file) {
         // check if it is the first time to use gitlet add
-        if(!index.exists()) {
+        if (!index.exists()) {
             createFile(index);
+            writeObject(index, stage);
         }
-        // writeObject(index, stage);
-        // TODO: check if the file content is the same as the one stored in the commit on the HEAD branch
-        // To simplify, I extract the latest commit file to compare
-        Commit latestCommit = listOfCommits.getLastCommit();
-        byte[] fileContent = null;
-        List<FileBlob> committedFileList = null;
-        if (latestCommit != null) {
-            committedFileList = latestCommit.getFileBlobList();
-            // read the content of the file to byte[]
-            fileContent = Utils.readContents(file);
-            boolean isSameFile = false;
+        /** Check if the file content is the same as the one stored in the commit on the HEAD branch
+         * To simplify, the latest commit file is obtained for comparison
+         */
+         // Step 1: extract data from commits file by reading the listOfCommits from commits file first
+        ListOfCommits<Commit> currListOfCommits = readObject(commits, ListOfCommits.class);
+        StageIndex currStage = readObject(index, StageIndex.class);
+        ListOfCommits.CommitNode<Commit> latestCommitNode = currListOfCommits.getLast();
+        // Step 2: read the content of the file to byte[] for later comparison with the committed file
+        byte[] fileContent = readContents(file);
+        List<FileBlob> committedFileList = latestCommitNode.getItem().getFileBlobList();
+        if (committedFileList != null) {
+            // check whether the file to be staged has been committed
             for (FileBlob fileBlob : committedFileList) {
-                if (Arrays.equals(fileContent, fileBlob.getFileContent())) {
-                    isSameFile = true;
+                String fileName = file.getName();
+                String fileBlobName =fileBlob.getFileName();
+                if (Arrays.equals(fileContent, fileBlob.getFileContent()) && fileName.equals(fileBlobName)) {
+                    // once there is a file that is exactly the same as the file to be added in terms of both file content and file name
+                    System.out.println("nothing to add");
+                    System.exit(0);
                 }
             }
-            if (!isSameFile) {
-                // add fileBlob to StageIndex instance and write fileBlob to index file
-                FileBlob fileForAddition = new FileBlob(file);
-                stage.addFileBlob(fileForAddition);
-                System.out.println("file has been staged");
-            } else {
-                System.out.println("nothing to add");
-                System.exit(0);
-            }
-        } else {
-            FileBlob fileForAddition = new FileBlob(file);
-            stage.addFileBlob(fileForAddition);
-            System.out.println("A new file has been staged!");
         }
-        writeObject(index, stage);
+
+        // if the file has been updated in the current working directory but not been committed yet, throw a message.
+        ArrayList<String> stagedFileNames =
+                currStage.getToAdd().stream()
+                        .map(n -> n.getFileName())
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+        if (stagedFileNames.contains(file.getName())) {
+            System.out.println("This file has not been committed");
+            System.exit(0);
+        }
+
+        FileBlob fileForAddition = new FileBlob(file);
+        // first read the current stage instance from index file
+        currStage.addFileBlob(fileForAddition);
+        System.out.println("The file has been staged!");
+        // update the index file with the updated StageIndex instance
+        writeObject(index, currStage);
     }
 
     /* to implement commit operation */
     public static void commit(String message) {
         // make a new commit based on the staged files (fileblobs to be specific)
-        List<FileBlob> filesForAddition = stage.getToAdd();
+        // step 1: read stage instance from index file
+        StageIndex currStage = readObject(index, StageIndex.class);
+        List<FileBlob> filesForAddition = currStage.getToAdd();
         Commit newCommit = new Commit(message, filesForAddition);
-        listOfCommits.addLast(newCommit);
-        System.out.println(listOfCommits.size);
+        ListOfCommits<Commit> currListOfCommits = readObject(commits, ListOfCommits.class);
+        currListOfCommits.addLast(newCommit);
+        writeObject(commits, currListOfCommits);
+        System.out.println(currListOfCommits.size);
         // after commit, the file in the index will be removed
-        stage.emptyToAdd();
+        currStage.emptyToAdd();
         // update index file
-        writeObject(index,stage);
+        writeObject(index, currStage);
     }
-
-
 
     public static void createFile(File file) {
         try {
