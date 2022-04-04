@@ -29,4 +29,9 @@ public class StageIndex implements Serializable {
     public void removeFileBlob(FileBlob fb) {
         toRemove.add(fb);
     }
+
+    // to remove file blobs
+    public void emptyToAdd(){
+        this.toAdd = null;
+    }
 }

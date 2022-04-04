@@ -3,6 +3,8 @@ package gitlet;
 import java.io.File;
 import java.util.TimeZone;
 
+import static gitlet.Repository.listOfCommits;
+
 /**
  * Driver class for Gitlet, a subset of the Git version-control system.
  *
@@ -23,26 +25,23 @@ public class Main {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
+            System.out.println(listOfCommits.size);
             throw new IllegalArgumentException("Please enter a command.");
         }
         String firstArg = args[0];
         switch (firstArg) {
             case "init":
-                // TODO: handle the `init` command
                 validateNumArgs("init", args, 1);
                 Repository.init();
                 break;
             case "add":
-                // TODO: handle the `add [filename]` command
                 validateNumArgs("add", args, 2);
                 Repository.add(new File(args[1]));
                 break;
             case "commit":
-                // TODO: handle the `commit "message"` command
-                validateNumArgs("commit", args, 3);
-//                Repository.commit(args[1], args[2]);
+                validateNumArgs("commit", args, 2);
+                Repository.commit(args[1]);
                 break;
-            // TODO: FILL THE REST IN
         }
     }
 

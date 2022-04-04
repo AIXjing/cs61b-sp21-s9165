@@ -13,6 +13,7 @@ public class FileBlob implements Serializable {
      private String fileName;
      private final byte[] fileContent;
      private final String blob;
+     private File fileForCommit;
 
     public String getFileName() {
         return fileName;
@@ -25,8 +26,6 @@ public class FileBlob implements Serializable {
     public String getBlob() {
         return blob;
     }
-
-    private File fileForCommit;
 
     public FileBlob(File file) {
         this.file = file;

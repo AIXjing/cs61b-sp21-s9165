@@ -1,9 +1,5 @@
 package gitlet;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -56,50 +52,57 @@ public class Repository{
         listOfCommits.addLast(initCommit);
     }
 
-    /* implement gitlet add */
-    public static void commit(File file, String message){
-        // check whether the file has already in the StageIndex instance
-
-
-//        listOfCommits.addLast(commit);
-    }
-
     /* Implement gitlet add (only one file at time) */
     public static void add(File file) {
         // check if it is the first time to use gitlet add
         if(!index.exists()) {
             createFile(index);
         }
-        writeObject(index, stage);
+        // writeObject(index, stage);
         // TODO: check if the file content is the same as the one stored in the commit on the HEAD branch
         // To simplify, I extract the latest commit file to compare
         Commit latestCommit = listOfCommits.getLastCommit();
         byte[] fileContent = null;
-        FileBlob committedFile = null;
+        List<FileBlob> committedFileList = null;
         if (latestCommit != null) {
-            committedFile = latestCommit.getFileBlob();
+            committedFileList = latestCommit.getFileBlobList();
             // read the content of the file to byte[]
             fileContent = Utils.readContents(file);
-            if (Arrays.equals(fileContent, committedFile.getFileContent())) {
-                System.out.println("Nothing to commit");
+            boolean isSameFile = false;
+            for (FileBlob fileBlob : committedFileList) {
+                if (Arrays.equals(fileContent, fileBlob.getFileContent())) {
+                    isSameFile = true;
+                }
             }
+            if (!isSameFile) {
+                // add fileBlob to StageIndex instance and write fileBlob to index file
+                FileBlob fileForAddition = new FileBlob(file);
+                stage.addFileBlob(fileForAddition);
+                System.out.println("file has been staged");
+            } else {
+                System.out.println("nothing to add");
+                System.exit(0);
+            }
+        } else {
+            FileBlob fileForAddition = new FileBlob(file);
+            stage.addFileBlob(fileForAddition);
+            System.out.println("A new file has been staged!");
         }
-          // add fileBlob to StageIndex instance and write fileBlob to index file
-            FileBlob fileBlobForAddition = new FileBlob(file);
-            stage.addFileBlob(fileBlobForAddition);
+        writeObject(index, stage);
     }
 
     /* to implement commit operation */
-//    public static void commit(String message) {
-//        Commit commit = new Commit(
-//                message,
-//                parentCommitId,
-//                String fileName,
-//                String blob,
-//                String branch,
-//        boolean isHead
-//                )
-//    }
+    public static void commit(String message) {
+        // make a new commit based on the staged files (fileblobs to be specific)
+        List<FileBlob> filesForAddition = stage.getToAdd();
+        Commit newCommit = new Commit(message, filesForAddition);
+        listOfCommits.addLast(newCommit);
+        System.out.println(listOfCommits.size);
+        // after commit, the file in the index will be removed
+        stage.emptyToAdd();
+        // update index file
+        writeObject(index,stage);
+    }
 
 
 

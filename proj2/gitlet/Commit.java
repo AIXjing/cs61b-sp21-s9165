@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static gitlet.Repository.*;
 import static gitlet.Utils.*;
@@ -30,20 +28,20 @@ public class Commit implements Serializable {
     private final String commitId;
     private final Date date; //TODO:
     private String message;
-    private FileBlob fileBlob; //TODO:
+    private List<FileBlob> listOfFileBlobs; //TODO:
 
     /* for normal commit */
-    public Commit(String message, File file) {
+    public Commit(String message, List<FileBlob> listOfFileBlobs) {
         // generate current timestamp
         this.date = new Date(System.currentTimeMillis());
         this.message = message;
         // generate commitId SHA-1 using message and timestamp
-        this.fileBlob = new FileBlob(file);
+        this.listOfFileBlobs = listOfFileBlobs;
         this.commitId = sha1(this.message);
     }
 
-    public FileBlob getFileBlob() {
-        return fileBlob;
+    public List<FileBlob> getFileBlobList() {
+        return listOfFileBlobs;
     }
 
     public String getCommitId() {

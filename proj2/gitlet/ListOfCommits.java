@@ -12,10 +12,13 @@ import static gitlet.Utils.writeObject;
 
 public class ListOfCommits<T> implements Serializable {  // A generic type is used here.
     private CommitNode<T> commitNode;
+    // for text
+    public int size;
 
     // construct a null commitNode and store it in a file
     public ListOfCommits() {
         this.commitNode = new CommitNode<>(null, null, null);
+        size = 0;
         // write this instance to a file
 //        writeCommitToFile();
     }
@@ -25,6 +28,7 @@ public class ListOfCommits<T> implements Serializable {  // A generic type is us
         CommitNode<T> parentCommitNode = this.commitNode;
         CommitNode<T> updatedCommitNode = new CommitNode<>(commit, parentCommitNode, null);
         this.commitNode = updatedCommitNode;
+        size += 1;
         writeObject(commits, this);
     }
 
@@ -36,16 +40,14 @@ public class ListOfCommits<T> implements Serializable {  // A generic type is us
 
     // get last commitNode
     public T getLastCommit() {
-        if (commitNode == null || commitNode.mainNode == null) {
+        if (commitNode == null) {
             return null;
         } else {
-            return commitNode.mainNode.item;
+            return commitNode.item;
         }
     }
 
-//    private void writeCommitToFile() {
-//        Utils.writeObject(commits, this);
-//    }
+
 
     // nested class
     private static class CommitNode<T> implements Serializable{
