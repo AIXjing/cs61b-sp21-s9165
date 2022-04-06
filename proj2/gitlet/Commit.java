@@ -54,8 +54,8 @@ public class Commit implements Serializable {
     @Override
     public String toString(){
         return "Commit " + commitId + "\n"
-                + date + "\n"
-                + "     " + message + "\n"
+                + "Date: " + date + "\n"
+                + message + "\n"
                 + "\n"
                 + "===";
     }

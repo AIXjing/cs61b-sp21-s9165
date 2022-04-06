@@ -112,4 +112,4 @@ And if a new commit is added using `addLast` to the ListOfCommit instance, then 
 ## TODO List
 
 1. `gitlet checkout <branchname>`
-2. how to set up branch and track branch
+2. how to set up a new branch and track branch - a better data structure is probably needed.
