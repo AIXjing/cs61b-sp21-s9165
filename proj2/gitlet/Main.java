@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import static gitlet.Repository.listOfCommits;
@@ -42,6 +43,20 @@ public class Main {
                 validateNumArgs("commit", args, 2);
                 Repository.commit(args[1]);
                 break;
+            case "checkout":
+                // gitlet checkout -- <file name>
+                if (Objects.equals(args[1], "--") && args.length == 3) {
+                    Checkout.checkoutFile(args[2]);
+                } else if (args.length == 2) {
+                    if (args[2].length() == 16) {
+                        Checkout.checkoutCommitId(args[2]);
+                    } else {
+                        Checkout.checkoutBranch(args[2]);
+                    }
+                }
+            case "log":
+                validateNumArgs("log", args, 1);
+                Repository.printLog();
         }
     }
 

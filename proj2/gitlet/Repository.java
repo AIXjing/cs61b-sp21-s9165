@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import gitlet.ListOfCommits.CommitNode;
 
 import static gitlet.Utils.*;
 
@@ -30,7 +31,7 @@ public class Repository {
     public static File objects = join(GITLET_DIR, "objects"); // store commit lists and file blobs
     public static final File commits = join(objects, "commits"); // store commits
     public static File head = join(GITLET_DIR, "head"); // store a path referring to the current branch and commit
-    public static ListOfCommits<Commit> listOfCommits = new ListOfCommits<>();
+    public static ListOfCommits listOfCommits = new ListOfCommits();
     public static StageIndex stage = new StageIndex(new ArrayList<FileBlob>(), new ArrayList<FileBlob>());
 
     /* implement gitlet init */
@@ -63,7 +64,7 @@ public class Repository {
          * To simplify, the latest commit file is obtained for comparison
          */
          // Step 1: extract data from commits file by reading the listOfCommits from commits file first
-        ListOfCommits<Commit> currListOfCommits = readObject(commits, ListOfCommits.class);
+        ListOfCommits currListOfCommits = readObject(commits, ListOfCommits.class);
         StageIndex currStage = readObject(index, StageIndex.class);
         ListOfCommits.CommitNode<Commit> latestCommitNode = currListOfCommits.getLast();
         // Step 2: read the content of the file to byte[] for later comparison with the committed file
@@ -108,7 +109,7 @@ public class Repository {
         StageIndex currStage = readObject(index, StageIndex.class);
         List<FileBlob> filesForAddition = currStage.getToAdd();
         Commit newCommit = new Commit(message, filesForAddition);
-        ListOfCommits<Commit> currListOfCommits = readObject(commits, ListOfCommits.class);
+        ListOfCommits currListOfCommits = readObject(commits, ListOfCommits.class);
         currListOfCommits.addLast(newCommit);
         writeObject(commits, currListOfCommits);
         System.out.println(currListOfCommits.size);
@@ -123,6 +124,18 @@ public class Repository {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /* print commit log */
+    public static void printLog() {
+        ListOfCommits currListOfCommit = readObject(commits, ListOfCommits.class);
+        CommitNode<Commit> currCommitNode = currListOfCommit.getLast();
+        Commit commit;
+        while (currCommitNode != null && currCommitNode.getItem() != null) {
+            commit = (Commit) currCommitNode.getItem();
+            System.out.println(commit.toString());
+            currCommitNode = currCommitNode.getMainNode();
         }
     }
 }

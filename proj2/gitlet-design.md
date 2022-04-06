@@ -15,12 +15,15 @@ CommitNode
 #### Basic element of CommitNode
 
 - Commit 
+- isHEAD
 - CommitNode (mainNode) pointing to the parent commitNode if on the main branch
 - CommitNode (stepNode) pointing to the parent commiteNode if on the other branch
 
 #### Functions
 
 1. addLast: add commitNode from the last commitNode
+2. setHEADTo: change the HEAD of the parent commit to false when a new commit incurs. 
+   The HEAD in the new commit will also be true.
 
 ### Class 2 - Commit
 
@@ -31,7 +34,7 @@ A Commit class to store each commit information
 1. String commitID: sha1 code
 2. Data date
 3. String message: commit message
-4. FileBlob fileBlob: an instance contains file information (see FileBlob for details)
+4. List<FileBlob> listOfFileBlobs: an instance contains the committed file information (see FileBlob for details)
 
 #### Functions
 
@@ -64,9 +67,7 @@ When `gitlet init` is called,
 
 ### gitlet add
 
-when `gitlet add <fileName>` is called,
-
-
+when `gitlet add <fileName>` is called, this file will be first compared with the committed file in the last commit. Then the file will be written into index file if it has not been committed.
 
 
 ### Algorithm of commit object
@@ -77,8 +78,6 @@ In addition, FileBlob will be generated to store the committed file information 
 also, a blob, a reference generated via sha1, will also be generated; in the last, a file named by the blob will be created and the file content will be written to it to store data.
 
 Note that the file in the commit instance should have been stored in StageIndex instance first, indicating this file has already been added.
-
-
 
 
 ## Persistence
@@ -110,3 +109,7 @@ Following above algorithm, when add file to staging area (StageIndex), we also n
 If the StageIndex is updated, then the updated instance will be written into the index file. Similarly, when we want to get the last commit from the ListOfCommit instance, we need to read from the commits file first. 
 And if a new commit is added using `addLast` to the ListOfCommit instance, then write the instance to the commits file.
                     
+## TODO List
+
+1. `gitlet checkout <branchname>`
+2. how to set up branch and track branch
