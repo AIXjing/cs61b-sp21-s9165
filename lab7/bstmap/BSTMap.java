@@ -3,10 +3,10 @@ package bstmap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
-    private TreeNode tree;
     int size;
+    private TreeNode tree;
 
     BSTMap() {
         this.tree = null;
@@ -14,7 +14,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     }
 
     // prints out your BSTMap in order of increasing Key
-    public void printInOrder(){
+    public void printInOrder() {
         throw new UnsupportedOperationException();
     }
 
@@ -66,7 +66,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
     @Override
     public void put(K key, V value) {
         // make a new TreeNode
-        TreeNode newNode = new TreeNode(key, value,null,null);
+        TreeNode newNode = new TreeNode(key, value, null, null);
         // if this tree is empty without root node
         if (this.tree == null) {
             this.tree = newNode;
@@ -132,12 +132,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K,V> {
         V value;
         TreeNode left;
         TreeNode right;
-        public TreeNode (K k, V v, TreeNode l, TreeNode r){
+
+        public TreeNode(K k, V v, TreeNode l, TreeNode r) {
             key = k;
             value = v;
             left = l;
             right = r;
         }
-
     }
 }
