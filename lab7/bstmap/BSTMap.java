@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
-    int size;
+    private int size;
     private TreeNode tree;
 
     public BSTMap() {
@@ -108,22 +108,22 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     public Set keySet() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public V remove(K key) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public V remove(K key, V value) {
-        return null;
+        throw new UnsupportedOperationException();;
     }
 
     @Override
     public Iterator iterator() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // nested class for tree node, which is the basic element for BSTMap
