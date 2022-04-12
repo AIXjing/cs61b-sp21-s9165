@@ -8,7 +8,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     int size;
     private TreeNode tree;
 
-    BSTMap() {
+    public BSTMap() {
         this.tree = null;
         this.size = 0;
     }
@@ -127,7 +127,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     // nested class for tree node, which is the basic element for BSTMap
-    private class TreeNode {
+    class TreeNode {
         K key;
         V value;
         TreeNode left;
