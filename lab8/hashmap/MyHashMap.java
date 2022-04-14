@@ -145,6 +145,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         } else if (containsKey(key)) {
             if (get(key).equals(value)) return;
             remove(key, get(key));
+            size -= 1;
         }
         buckets[bucketIndex].add(createNode(key, value));
         this.size += 1;
@@ -155,25 +156,32 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     // resize up hashtable
     private void resizeUp() {
-        int tmpTableSize = tableSize * 2; // double the bucket size
+        int tmpTableSize = tableSize * 2;
         this.buckets = reHashing(tmpTableSize);
     }
 
     // resize down hashtable
+    /*
     private void resizeDown() {
-        int tmpTableSize = tableSize / 2; // double the bucket size
+        int tmpTableSize = tableSize / 2 + 1;
+        if (tmpTableSize < INITIALSIZE_DEFAULT ) {
+            this.buckets = reHashing(INITIALSIZE_DEFAULT);
+            this.tableSize = INITIALSIZE_DEFAULT;
+            return;
+        }
         this.buckets = reHashing(tmpTableSize);
     }
+    */
 
-    private Collection<Node>[] reHashing (int tmpTableSize) {
+    private Collection<Node>[] reHashing(int tmpTableSize) {
         Collection<Node>[] newBuckets = createTable(tmpTableSize);
         for (K k : keySet()) {
             int k_hashcode = k.hashCode();
             int newBucketIndex = Math.floorMod(k_hashcode, tmpTableSize);
-            if(newBuckets[newBucketIndex] == null) {
+            if (newBuckets[newBucketIndex] == null) {
                 newBuckets[newBucketIndex] = createBucket();
             }
-            newBuckets[newBucketIndex].add(new Node(k, get(k)));
+            newBuckets[newBucketIndex].add(createNode(k, get(k)));
         }
         this.tableSize = tmpTableSize;
         return newBuckets;
@@ -225,10 +233,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         for (Node entry : entrySet()) {
             if (key.equals(entry.key)) {
                 buckets[bucketIndex].remove(entry);
+                if (buckets[bucketIndex] == null) {
+                    buckets[bucketIndex] = createBucket();
+                }
             }
         }
         size -= 1;
-        if (tableSize > 16 && (double) this.size / tableSize < 0.75) resizeDown();
+//        if (tableSize > 16 && (double) this.size / tableSize < 0.75) resizeDown();
         return value;
 //        throw new UnsupportedOperationException("unsupported operation");
     }
