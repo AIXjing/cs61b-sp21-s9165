@@ -145,7 +145,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         } else if (containsKey(key)) {
             if (get(key).equals(value)) return;
             remove(key, get(key));
-            size -= 1;
         }
         buckets[bucketIndex].add(createNode(key, value));
         this.size += 1;
@@ -205,7 +204,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return keySet;
     }
 
-    public Set<Node> entrySet() {
+    private Set<Node> entrySet() {
         HashSet<Node> entrySet = new HashSet<>();
         for (Collection<Node> bucket : buckets) {
             if (bucket != null) {
@@ -222,6 +221,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if (!containsKey(key)) return null;
         V value = get(key);
         remove(key, value);
+        size -= 1;
         return value;
 //        throw new UnsupportedOperationException("unsupported operation");
     }
