@@ -40,5 +40,20 @@ The skeleton code can be found [here](https://github.com/Berkeley-CS61B/skeleton
     - Build my own `LinkedListDeque` Class following *Deque* API 
 
 - Project 2: [Gitlet](https://github.com/Berkeley-CS61B/skeleton-sp21/tree/master/proj2)
+  
+  The project specification can be found [here](https://sp21.datastructur.es/materials/proj/proj2/proj2#example-test)
 
-    - Implement a version-control system that mimics some of the basic features of Git.
+  The project aims to build an implementation very similar to github, but much simplier (that's why it is called gitlet!).
+The goal is to achieve the basic function like `git init`, `git add`, `git commit`, `git checkout`, `git log`, `git merge`, etc.
+Due to time limitation and lack of TA while self-study, I only implemented the following functions for gitlet.
+
+  - `gitlet init`: creates a hidden folder named .gitlet which tracks all the work in the current working directory.
+
+  - `gitlet add <fileName>`: stages a file to the staging area
+
+  - `gitlet commit <message>`: adds the staged file to a commit
+
+  - `gitlet checkout -- <fileName>`: takes the version of the file as it exists in the head commit and puts it in the working directory
+
+  - `gitlet log`: print out commit history
+

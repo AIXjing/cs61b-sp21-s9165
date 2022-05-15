@@ -370,8 +370,8 @@ tramp
 
 # Capers Lab Things (SP21)
 !Makefile
-!lab6/testing/*
-!lab6/testing/our/*
+#!lab6/testing/*
+#!lab6/testing/our/*
 
 # Project 3 Image/Audio/Video Files
 !proj3/**/*.png
